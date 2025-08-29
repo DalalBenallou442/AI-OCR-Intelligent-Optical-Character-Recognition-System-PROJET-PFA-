@@ -6,150 +6,208 @@
   <title>Extraction Bilan Actif/Passif</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
-      min-height: 100vh;
+    /* Thèmes clair et sombre */
+    body.light-theme {
       background: linear-gradient(135deg, #e8f5e9 0%, #b2dfdb 100%);
+      color: #000;
     }
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 1.2s ease-in-out forwards;
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    .fancy-btn {
-      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-      border: none;
+    body.dark-theme {
+      background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
       color: #fff;
+    }
+
+    .card, .fancy-card {
+      transition: box-shadow 0.3s, transform 0.3s, background 0.3s, color 0.3s;
+    }
+
+    body.light-theme .card, body.light-theme .fancy-card {
+      background: linear-gradient(90deg, #e0f7fa 0%, #f1f8e9 100%);
+      color: #000;
+    }
+    body.dark-theme .card, body.dark-theme .fancy-card {
+      background: linear-gradient(90deg, #1e1e1e 0%, #2c2c2c 100%);
+      color: #fff;
+    }
+
+    .fancy-btn {
       transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
       box-shadow: 0 2px 8px rgba(67,206,162,0.12);
     }
-    .fancy-btn:hover, .fancy-btn:focus {
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 6px 24px rgba(24,90,157,0.18);
-      background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+    body.light-theme .fancy-btn {
+      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
       color: #fff;
     }
-    .fancy-card {
-      background: linear-gradient(90deg, #e0f7fa 0%, #f1f8e9 100%);
-      transition: box-shadow 0.3s, transform 0.3s;
+    body.dark-theme .fancy-btn {
+      background: linear-gradient(90deg, #444 0%, #888 100%);
+      color: #fff;
     }
-    .fancy-card:hover {
-      box-shadow: 0 8px 32px rgba(67,206,162,0.18);
-      transform: scale(1.015);
-    }
-    .logo-anim {
-      animation: logoPop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
-    }
-    @keyframes logoPop {
-      0% { transform: scale(0.7) rotate(-10deg); opacity: 0; }
-      60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
-      100% { transform: scale(1) rotate(0); opacity: 1; }
-    }
+    .fancy-btn:hover, .fancy-btn:focus { transform: translateY(-2px) scale(1.04); }
+
+    .fade-in { opacity: 0; animation: fadeIn 1.2s ease-in-out forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
   </style>
 </head>
-
-<body style="min-height:100vh; background: linear-gradient(135deg, #e8f5e9 0%, #b2dfdb 100%); position:relative;">
-
+<body>
 <div class="container mt-5 shadow-lg rounded-4 p-4 fade-in" style="max-width: 900px; background: rgba(255,255,255,0.95);">
 
-  <div class="text-center mb-4 pt-2">
-    <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="Logo BMCI" style="max-width: 120px; margin-bottom: 10px; filter: drop-shadow(0 2px 8px #b2dfdb);">
-    <h2 class="fw-bold" style="color: #006442; letter-spacing: 1px; text-shadow: 0 2px 8px #b2dfdb;">BMCI - Extraction Bilan</h2>
-    <div class="mb-2" style="color: #333; font-size: 1.1em; opacity:0.8;">Groupe BNP Paribas</div>
+  <!-- Toggle Thème -->
+  <div class="text-end mb-3">
+    <button id="theme-toggle" class="btn btn-sm btn-secondary">🌙 Sombre</button>
   </div>
 
-  <!-- Formulaire -->
+  <div class="text-center mb-4 pt-2">
+    <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="Logo BMCI" style="max-width: 120px;">
+    <h2 class="fw-bold" style="color: #006442;">BMCI - Extraction Bilan</h2>
+    <div style="color: #333; font-size: 1.1em; opacity:0.8;">Groupe BNP Paribas</div>
+  </div>
+
+  <!-- Formulaires d'upload -->
   <div class="row g-4 mb-4">
     <div class="col-12 col-md-6">
-      <div class="card shadow-sm border-success rounded-3 h-100">
+      <div class="card shadow-sm border-success rounded-3 h-100 fancy-card">
         <div class="card-body text-center">
           <h5 class="card-title text-success mb-3">PDF non scanné (natif)</h5>
           <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-              <input type="file" id="file" name="file" class="form-control" accept="application/pdf" required>
-            </div>
+            <input type="file" name="file" class="form-control mb-3" accept="application/pdf" required>
             <button type="submit" class="btn w-100 fancy-btn">Extraire le PDF </button>
           </form>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6">
-      <div class="card shadow-sm border-primary rounded-3 h-100">
+      <div class="card shadow-sm border-primary rounded-3 h-100 fancy-card">
         <div class="card-body text-center">
           <h5 class="card-title text-primary mb-3">PDF scanné (image)</h5>
-          <form>
-            <div class="mb-3">
-              <input type="file" class="form-control" accept="application/pdf" disabled>
-            </div>
-            <button type="button" class="btn w-100 fancy-btn" style="opacity:0.6;" disabled>Extraire le PDF </button>
+          <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" class="form-control mb-3" accept="application/pdf,image/png,image/jpeg,image/jpg" required>
+            <button type="submit" class="btn w-100 fancy-btn btn-warning">Extraire le PDF</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Si fichier uploadé -->
-  {% if filename %}
-    <div id="uploaded-file-card" class="card mb-3 shadow-sm border-success rounded-3 fancy-card position-relative">
-      <div class="card-body text-center">
-        <h5 class="card-title text-success">Fichier uploadé
-          <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2" id="remove-uploaded-file" title="Annuler le fichier" style="z-index:2;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-              <path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </button>
-        </h5>
-        <p class="card-text"><strong>Nom :</strong> {{ filename }}</p>
-        <form action="{{ url_for('extract_excel') }}" method="post">
-          <input type="hidden" name="filename" value="{{ filename }}">
-          <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
-        </form>
-      </div>
+  <!-- Barre de progression -->
+  <div id="processing-bar" style="display:none; text-align:center; margin-bottom:20px;">
+    <div class="progress" style="height: 30px;">
+      <div id="progress-bar-inner" class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+           role="progressbar" style="width: 0%; font-size:1.1em;">Traitement en cours...</div>
     </div>
+  </div>
 
-    <script>
-      // Masquer le bloc du fichier uploadé et supprimer côté serveur
-      document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.getElementById('remove-uploaded-file');
-        if (btn) {
-          btn.addEventListener('click', function() {
-            var card = document.getElementById('uploaded-file-card');
-            if (card) card.style.display = 'none';
-            // Appel AJAX pour supprimer côté serveur
-            fetch("{{ url_for('delete_uploaded_file') }}", {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ filename: "{{ filename }}" })
-            })
-            .then(r => r.json())
-            .then(data => {
-              if (!data.success) {
-                alert('Erreur lors de la suppression du fichier : ' + (data.error || ''));
-              }
-            })
-            .catch(() => alert('Erreur réseau lors de la suppression du fichier.'));
-          });
-        }
-      });
-    </script>
+  <!-- Bloc fichier uploadé -->
+  {% if filename %}
+  <div id="uploaded-file-card" class="card mb-3 shadow-sm border-success rounded-3 fancy-card position-relative">
+    <div class="card-body text-center">
+      <h5 class="card-title text-success">Fichier uploadé
+        <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2" id="remove-uploaded-file" title="Annuler le fichier">X</button>
+      </h5>
+      <p class="card-text"><strong>Nom :</strong> {{ filename }}</p>
+      {% if is_scanned %}
+      <form action="{{ url_for('extract_excel_gemini') }}" method="post">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+      </form>
+      {% else %}
+      <form action="{{ url_for('extract_excel') }}" method="post">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
   {% endif %}
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Masquer le bloc du fichier uploadé quand on clique sur la croix
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('remove-uploaded-file');
-      if (btn) {
-        btn.addEventListener('click', function() {
-          var card = document.getElementById('uploaded-file-card');
-          if (card) card.style.display = 'none';
-        });
-      }
+  // --- Thème clair/sombre ---
+  const toggleBtn = document.getElementById('theme-toggle');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    document.body.classList.toggle('light-theme');
+    toggleBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️ Clair' : '🌙 Sombre';
+  });
+  document.body.classList.add('light-theme'); // thème clair par défaut
+
+  // --- Supprimer fichier uploadé ---
+  function removeUploadedFile() {
+    var uploadedCard = document.getElementById('uploaded-file-card');
+    if(uploadedCard) uploadedCard.remove();
+    var fileInput = document.querySelector('input[type="file"]');
+    if(fileInput) fileInput.value = '';
+  }
+
+  var removeBtn = document.getElementById('remove-uploaded-file');
+  if(removeBtn) {
+    removeBtn.addEventListener('click', function() {
+      removeUploadedFile();
+      fetch("{{ url_for('delete_uploaded_file') }}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: "{{ filename }}" })
+      });
     });
-  </script>
+  }
+
+  // --- Conversion Excel avec barre de progression ---
+  document.querySelectorAll('form[action$="extract_excel"], form[action$="extract_excel_gemini"]').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var barContainer = document.getElementById('processing-bar');
+      var progressBar = document.getElementById('progress-bar-inner');
+      barContainer.style.display = 'block';
+      progressBar.style.width = '0%';
+      progressBar.textContent = 'Traitement en cours...';
+      progressBar.classList.remove('bg-danger');
+      progressBar.classList.add('bg-info');
+
+      var formData = new FormData(form);
+
+      let width = 0;
+      let interval = setInterval(()=>{
+        if(width >= 90) clearInterval(interval);
+        else { width += Math.floor(Math.random()*10)+1; if(width>90) width=90; progressBar.style.width=width+'%'; }
+      },200);
+
+      fetch(form.action, { method: 'POST', body: formData })
+        .then(response => response.blob().then(blob => ({ blob: blob, headers: response.headers })))
+        .then(obj => {
+          var url = window.URL.createObjectURL(obj.blob);
+          var a = document.createElement('a');
+          a.href = url;
+          var disposition = obj.headers.get('Content-Disposition');
+          var filename = 'result.xlsx';
+          if(disposition && disposition.indexOf('filename=')!=-1){
+            filename = disposition.split('filename=')[1].replace(/"/g,'');
+          }
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+
+          progressBar.style.width='100%';
+          progressBar.textContent='Téléchargement avec succès !';
+          setTimeout(()=>{
+            barContainer.style.display='none';
+            removeUploadedFile();
+          },2000);
+        })
+        .catch(err => {
+          clearInterval(interval);
+          progressBar.classList.remove('bg-info');
+          progressBar.classList.add('bg-danger');
+          progressBar.textContent='Erreur pendant le traitement.';
+          console.error(err);
+        });
+    });
+  });
+
+});
+</script>
 </body>
 </html>
