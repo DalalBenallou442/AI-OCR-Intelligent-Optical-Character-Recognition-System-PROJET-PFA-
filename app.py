@@ -30,21 +30,46 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 
-def detect_scanned_pdf(filepath):
+def detect_scanned_pdf(filepath, min_alpha_chars=30):
     """
-    Retourne True si le PDF est scanné (image) donc sans texte.
-    Retourne False si le PDF contient du texte (natif).
+    Retourne True si le PDF semble scanné (image) :
+    - extrait le texte (PyPDF2) et compte les caractères alphabétiques ;
+    - si peu de texte -> vérifie la présence d'images via fitz (page.get_images()).
     """
     try:
+        from PyPDF2 import PdfReader
         reader = PdfReader(filepath)
         text = ""
         for page in reader.pages:
-            extracted = page.extract_text()
-            if extracted:
-                text += extracted
-        return len(text.strip()) == 0  # aucun texte trouvé → scanné
+            txt = page.extract_text()
+            if txt:
+                text += txt + "\n"
+
+        alpha_chars = sum(1 for c in text if c.isalpha())
+        if alpha_chars >= min_alpha_chars:
+            # beaucoup de texte => PDF natif
+            return False
+
+        # si peu de texte on considère scanné, mais on vérifie la présence d'images
+        try:
+            import fitz
+            doc = fitz.open(filepath)
+            img_count = 0
+            for page in doc:
+                imgs = page.get_images(full=True)
+                if imgs:
+                    img_count += len(imgs)
+            doc.close()
+            # s'il y a des images => scanné
+            return img_count > 0 or alpha_chars < min_alpha_chars
+        except Exception:
+            # si fitz indisponible, on parie sur le peu de texte et on retourne True
+            return True
+
     except Exception:
-        return True  # en cas d’erreur de lecture, on suppose scanné
+        # en cas d'erreur on suppose scanné (comportement sûr)
+        return True
+
 
 
 # --- Route principale : upload du fichier ---
@@ -189,6 +214,7 @@ def delete_uploaded_file():
 def extract_excel_gemini():
     """
     Extraction OCR Gemini : traite le PDF ou l'image uploadé(e) avec Gemini et renvoie l'Excel.
+    Accepts optional form field 'force_scanned' to force "scanned" processing.
     """
     filename = request.form.get('filename')
     if not filename:
@@ -200,28 +226,53 @@ def extract_excel_gemini():
         flash("Fichier introuvable sur le serveur.")
         return redirect(url_for('index'))
 
-    # Conversion image → PDF si besoin (déjà vu plus haut)
+    # --- Lecture du paramètre facultatif "forcer scanné" ---
+    force_val = request.form.get("force_scanned")
+    force = False
+    if force_val is not None:
+        # accepte "1", "on", "true", "yes"
+        if str(force_val).lower() in ("1", "on", "true", "yes"):
+            force = True
+
+    # Détection (sauf si forcée)
+    if not force:
+        is_scanned_local = detect_scanned_pdf(pdf_path)
+    else:
+        is_scanned_local = True
+        print("DEBUG: Forcé par l'utilisateur -> traitement comme PDF scanné")
+
+    # Si c'est une image unique upload (ex: image/png) converti en PDF (tu avais déjà ça)
     import mimetypes
     mime, _ = mimetypes.guess_type(pdf_path)
-    if mime and mime.startswith("image/"):
+    if mime and mime.startswith("image/") and not pdf_path.lower().endswith(".pdf"):
         from PIL import Image
         img = Image.open(pdf_path)
         pdf_converted = os.path.splitext(pdf_path)[0] + "_converted.pdf"
         img.convert("RGB").save(pdf_converted, "PDF")
         pdf_path = pdf_converted
+        is_scanned_local = True
 
     out_xlsx = os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}_gemini.xlsx")
     try:
-        result_xlsx = process_inputs(pdf_path, out_xlsx=out_xlsx)
+        # Si l'on considère le document scanné -> on extrait les images et utilise Gemini
+        if is_scanned_local:
+            result_xlsx = process_inputs(pdf_path, out_xlsx=out_xlsx)
+        else:
+            # PDF natif : utiliser ton process_pdf (extraction texte + tables natifs)
+            result_xlsx = process_pdf(pdf_path, out=out_xlsx)
+        if not result_xlsx:
+            flash("Aucun résultat extrait par Gemini OCR.")
+            return redirect(url_for('index'))
     except Exception as e:
         flash(f"Erreur Gemini OCR : {e}")
         return redirect(url_for('index'))
 
     if not os.path.isfile(result_xlsx):
-        flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement Gemini.")
+        flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
         return redirect(url_for('index'))
 
-    return send_file(out_xlsx, as_attachment=True)
+    return send_file(result_xlsx, as_attachment=True)
+
 
 
 # --- Lancement ---

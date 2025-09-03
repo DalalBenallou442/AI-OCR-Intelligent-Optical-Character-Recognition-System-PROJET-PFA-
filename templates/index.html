@@ -104,10 +104,16 @@
       </h5>
       <p class="card-text"><strong>Nom :</strong> {{ filename }}</p>
       {% if is_scanned %}
-      <form action="{{ url_for('extract_excel_gemini') }}" method="post">
-        <input type="hidden" name="filename" value="{{ filename }}">
-        <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
-      </form>
+     <!-- dans le form d'extraction (uploaded file card) -->
+<form action="{{ url_for('extract_excel_gemini') }}" method="post">
+  <input type="hidden" name="filename" value="{{ filename }}">
+  <div class="form-check mb-2">
+    <input class="form-check-input" type="checkbox" value="1" id="force_scanned" name="force_scanned">
+    <label class="form-check-label" for="force_scanned">Forcer traitement comme PDF scanné</label>
+  </div>
+  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+</form>
+
       {% else %}
       <form action="{{ url_for('extract_excel') }}" method="post">
         <input type="hidden" name="filename" value="{{ filename }}">
