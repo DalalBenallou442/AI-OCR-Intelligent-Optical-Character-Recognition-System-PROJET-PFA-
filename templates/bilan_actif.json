@@ -1,0 +1,482 @@
+[
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS EN NON VALEUR (A)",
+    "Rubrique": "Immobilisations en non valeurs (A)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS EN NON VALEUR (A)",
+    "Rubrique": "Frais préliminaires",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS EN NON VALEUR (A)",
+    "Rubrique": "Charges à répartir sur plusieurs exercices",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS EN NON VALEUR (A)",
+    "Rubrique": "Primes de remboursement des obligations",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS INCORPORELLES (B)",
+    "Rubrique": "Immobilisations incorporelles (B)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS INCORPORELLES (B)",
+    "Rubrique": "Immobilisations en recherche et développement",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS INCORPORELLES (B)",
+    "Rubrique": "Brevets, marques, droits et valeurs similaires",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS INCORPORELLES (B)",
+    "Rubrique": "Fonds commercial",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS INCORPORELLES (B)",
+    "Rubrique": "Autres immobilisations incorporelles",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Immobilisations corporelles (C)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Terrains",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Constructions",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Installations techniques, matériel et outillage",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Matériel de transport",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Mobilier, matériel de bureau et aménagements divers",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Autres immobilisations corporelles",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS CORPORELLES (C)",
+    "Rubrique": "Immobilisations corporelles en cours",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS FINANCIÈRES (D)",
+    "Rubrique": "Immobilisations financières (D)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS FINANCIÈRES (D)",
+    "Rubrique": "Prêts immobilisés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS FINANCIÈRES (D)",
+    "Rubrique": "Autres créances financières",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS FINANCIÈRES (D)",
+    "Rubrique": "Titres de participation",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "IMMOBILISATIONS FINANCIÈRES (D)",
+    "Rubrique": "Autres titres immobilisés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "ÉCARTS DE CONVERSION – ACTIF (E)",
+    "Rubrique": "Ecarts de conversion actif (E)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "ÉCARTS DE CONVERSION – ACTIF (E)",
+    "Rubrique": "Diminution des créances immobilisées",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "ÉCARTS DE CONVERSION – ACTIF (E)",
+    "Rubrique": "Augmentation des dettes de financement",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TOTAL I (A+B+C+D+E):",
+    "Rubrique": "TOTAL I (A+B+C+D+E)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Stocks (F)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Marchandises",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Matières et fournitures consommables",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Produits en cours",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Produits intermédiaires et produits résiduels",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "STOCKS (F)",
+    "Rubrique": "Produits finis",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Créances de l'actif circulant (G)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Fournisseurs débiteurs, avances et acomptes",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Clients et comptes rattachés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "État",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Comptes d’associés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Autres débiteurs",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "CRÉANCES DE L'ACTIF CIRCULANT (G)",
+    "Rubrique": "Comptes de régularisation - Actif",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TITRES ET VALEURS DE PLACEMENT (H)",
+    "Rubrique": "Titres valeurs de placement (H)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "ÉCARTS DE CONVERSION – ACTIF (I)",
+    "Rubrique": "Ecarts de conversion actif (1) Elémentscirculants",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TOTAL II (F+G+H+D)",
+    "Rubrique": "TOTAL II (F+G+H+D)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TRÉSORERIE – ACTIF (J)",
+    "Rubrique": "Trésorerie-Actif",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TRÉSORERIE – ACTIF (J)",
+    "Rubrique": "Banques, T.G. et C.C.P.",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TRÉSORERIE – ACTIF (J)",
+    "Rubrique": "Chèques et valeurs à encaisser",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TRÉSORERIE – ACTIF (J)",
+    "Rubrique": "Caisse, régie d’avances et accréditifs",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TOTAL III ",
+    "Rubrique": "TOTAL III",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Actif",
+    "Sous_Categorie": "TOTAL GENERAL I+II+III",
+    "Rubrique": "TOTAL GENERAL I+II+III",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  }
+]

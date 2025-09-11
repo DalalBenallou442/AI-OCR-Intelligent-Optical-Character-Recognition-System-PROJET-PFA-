@@ -1,0 +1,804 @@
+{
+  "CPC": [
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "I. PRODUITS D'EXPLOITATION"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Ventes de marchandises (en l'état)"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Ventes de biens et services produits"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Chiffres d'affaires"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Variation de stocks de produits (1)"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Immobilisations produites par l'entreprise pour elle-même"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Subventions d'exploitation"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Autres produits d'exploitation"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Reprises d'exploitation ; transferts de charges"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Total I"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "II. CHARGES D'EXPLOITATION"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Achats de marchandises"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Achats de matières premières et fournitures"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Autres charges externes"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Impôts et taxes"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Charges de personnel"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Autres charges d'exploitation"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Dotations d'exploitation"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "Total II"
+    },
+    {
+      "Sous_Categorie": "EXPLOITATION",
+      "Rubrique": "III. RESULTAT D'EXPLOITATION (I - II)"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "IV. PRODUITS FINANCIERS"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Produits des titres de participation"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Interêts et autres produits financiers"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Reprises financières ; transferts de charges"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Total IV"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "V. CHARGES FINANCIERES"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Charges d'intérêts"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Pertes de change"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Autres charges financières"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Dotations financières"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "Total V"
+    },
+    {
+      "Sous_Categorie": "FINANCIER",
+      "Rubrique": "VI. RESULTAT FINANCIER (IV - V)"
+    },
+    {
+      "Sous_Categorie": "COURANT",
+      "Rubrique": "VII. RESULTAT COURANT (III + VI)"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "VIII. PRODUITS NON COURANTS"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Produits des cessions d'immobilisations"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Subventions d'équilibre"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Reprises sur subventions d'investissement"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Autres produits non courants"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Reprises non courantes ; transferts de charges"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Total VIII"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "IX. CHARGES NON COURANTES"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Valeurs nettes d'amortissement des immobilisations cédées"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Subventions accordées"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Autres charges non courantes"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Dotations non courantes aux amortissements et aux provisions"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "Total IX"
+    },
+    {
+      "Sous_Categorie": "NON COURANT",
+      "Rubrique": "X. RESULTAT NON COURANT (VIII - IX)"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "XI. RESULTAT AVANT IMPOT (VII + X)"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "XII. IMPOT SUR LE RESULTAT"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "XIII. RESULTAT NET (XI - XII)"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "XIV. TOTAL DES PRODUITS (I + IV + VIII)"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "XV. TOTAL DES CHARGES (II + V + IX + XII)"
+    },
+    {
+      "Sous_Categorie": "RESULTATS",
+      "Rubrique": "RESULTAT NET"
+    }
+  ],
+  "Bilan_Actif": [
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tresorerie Actif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Titres Et Valeurs De Placement"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Creances"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Stocks"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Financieres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Incorporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "(Actif - Passif) = A - Bi- Synthese Des Masses Du"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "*  Valeurs Nettes D'Amortissements Des"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "*  Variation De Stocks De Produits"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Autres Immobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Autres Immobilisations Incorporellesimmobilisations Incorporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Creances Devenues Irrecouvrables"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Immobilisations Corporelles En Coursimmobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Immobilisations Produites Par"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Materiel Informatiqueimmobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Pertes Sur Creances Irrecouvrables"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Primes De Remboursement Obligationsimmobilisation En Non-Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Produits Des Titres De Partic. Et Autres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Produits Nets Sur Cessions De Titres Et"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Revenus Des Creances Rattachees A"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "* Variation Des Stocks Des Biens"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "*Variation Des Stocks De Matieres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "*Variation Des Stocks Des Produits En"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "*Variation Des Stocks Des Services"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "- Augmentation Des Creances"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "- Cessions D'Immobilisations"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "- Recuperations Sur Creances"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Immobilisations En Non Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Stocks"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Titres De Participation"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Tresorerie - Actif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1. Provisions Pour Depreciation De L'Actif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "10+15+18+22)Stocksstocksstock Final : Montant Brut  Stock Final : Provision Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "10- Total Stocks"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "15- Total Stocks Des En Cours"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "18- Total Stocks Produits Et Biens"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Creances"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Immobilisations Incorporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Tresorerie - Passif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "20- Rebutsstocksstocksstock Final : Montant Brut  Stock Final : Provision Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "22- Total Stocks Produits Residuels"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "3- Immobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "3- Titres Et Valeurs De Placementii- Actif Circulant (Hors Tresorerie)- A-"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "4- Immobilisations Financieresi- Actif Immobilise- A- Evaluation"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "4. Provisions Pour Depreciation De L'Actif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "4. Variation Stocks Produits"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "5. Immobilisations Produites Par"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "7Nombre De Titres : Exercice Actuel 8 Valeur Nominale De Chaque Action Ou Part"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "8- Titres De Participation"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "9. (+) Valeurs Nettes D'Amortiss. Des"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Augmentation Des Creances"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Augmentations Des Dettes De Financementecarts De Conversion - Actif (E)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Autres Creances Financieres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Autres Immobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Autres Titres Immobilisesimmobilisations Financieres (D)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Banques (Soldes Crediteurs)Tresorerie - Passif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Caisse, Regie D'Avances Et Accreditifstresorerie - Actif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Cheques Et Valeurs A Encaisser"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Circulant (Hors Tresorerie)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Circulantsecarts De Conversion - Actif (I)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Conversion - Actifi- Actif Immobilise- B- Corrections"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Conversion - Actifii- Actif Circulant (Hors Tresorerie)- B-"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Conversion - Passifiv- Passif Circulant (Hors Tresorerie)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Corrections De Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Credits De Tresorerie"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "D'Immobilisations"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "D'Immobilisations (B)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "D'Immobilisations (E)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "D'Immobilisations Corporelles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "D'Immobilisations Financieres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "De Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Depreciation Stock Final : Montant Net  Stock Initial : Montant Brut  Stock Initial : Provision Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Depreciation Stock Initial : Montant Net  Variation De Stock En Valeur (+ Ou -)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Depreciationv- Tresorerienature Description"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Diminution Des Creances Immobilisees"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Ecarts De Conversion   Actif (E)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Ecarts De Conversion  Actif (I) Elements"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Et Valeurs De Placement"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "I. Stocks Approvisionnement"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Ii. Stock En Cours Production De"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Iii. Stock Produits Finis"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisation En Non-Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Brutes"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Cedees"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations En Non Valeurs (A)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Immobilisations Financieres (D)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Iv . Stock Produits Residuels"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Obligationsimmobilisation En Non-Valeurs"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Primes De Remboursement Des Obligationsimmobilisation En Non Valeurs (A)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Produits Finisstocks (F)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Rentrees Sur Immobilisations"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Stocks (F)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Bilan (Actif)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Detail De La Taxe Sur La Valeur Ajoutee"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Etat Des Dotations Aux Amortissements Relatifs Aux Immobilisations"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Etat Detaille Des Stocks"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Tableau Des Immobilisations Autres Que Financieres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Tableau Des Plus Ou Moins Values Sur Cessions Ou Retraits D'Immobilisations"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Tableau Des Titres De Participation"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Titres De Participation"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Titres Immobilises"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Titres Valeurs De Placement (H) Titres Valeurs De Placement (H)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Totaltotalentree Contre Valeur En Dh Sortie Contre Valeur En Dh"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tresorerieiv- Variation De La"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Valeur Estimee Du Bien A"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Valeurs (H)Ii- Emplois Et Ressources- Ii-"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Valeurs De Placement"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Variation Des Stocks De Marchandises"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Variation Des Stocks De Matieres,"
+    }
+  ],
+  "Bilan_Passif": [
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tresorerie - Passif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Dettes Du Passif Circulant"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Provisions Durables"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Dettes De Financement"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Capitaux Propres Assimiles"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Capitaux Propres"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "(G)Autres Provisions Pour Risques Et"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Dettes Du Passif Circulant"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "1- Methodes D'Evaluation Des Provisions Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Methodes D'Evaluation Des Autres Provisions"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Methodes D'Evaluation Des Provisions"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2- Methodes D'Evaluation Des Provisions Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "2. Provisions Reglementees"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "3- Dettes De Financement Permanent"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "3- Methodes D'Evaluation Des Provisions Pour"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "4- Methodes D'Evaluation Des Provisions"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "5. Autres Provisions Pour Risques Et Charge"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "6. Provisions Pour Depreciation Des Comptes De"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Amortissements Et Aux Provisions"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Autres Dettes De Financementdettes De Financement (C)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Capitaux Propres (F)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Capitaux Propres Et"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Circulants) (H)Ecarts De Conversion - Passif"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Clients Crediteurs, Avances Et"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Comptes De Regularisation Passifdettes Du Passif Circulant (F)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Conversion - Passifiii- Financement Permanent"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Dettes De"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Dettes De Financement (C)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Diminution Des Dettes De Financementecarts De Conversion - Passif (E)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Ecarts De Conversion - Passif (Elements"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Ecarts De Conversion-Passif (E)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Provisions Pour Risques"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Provisions Reglementeescapitaux Propres Assimiles (B)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Remboursement Des Dettes De"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Bilan (Passif)"
+    },
+    {
+      "Sous_Categorie": "",
+      "Rubrique": "Tableau : Tableau Des Provisions"
+    }
+  ]
+}

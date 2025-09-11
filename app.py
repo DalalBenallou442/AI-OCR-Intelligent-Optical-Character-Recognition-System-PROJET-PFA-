@@ -241,7 +241,7 @@ def extract_excel_gemini():
         is_scanned_local = True
         print("DEBUG: Forcé par l'utilisateur -> traitement comme PDF scanné")
 
-    # Si c'est une image unique upload (ex: image/png) converti en PDF (tu avais déjà ça)
+    # Si c'est une image unique upload (ex: image/png) converti en PDF
     import mimetypes
     mime, _ = mimetypes.guess_type(pdf_path)
     if mime and mime.startswith("image/") and not pdf_path.lower().endswith(".pdf"):
@@ -254,24 +254,31 @@ def extract_excel_gemini():
 
     out_xlsx = os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}_gemini.xlsx")
     try:
-        # Si l'on considère le document scanné -> on extrait les images et utilise Gemini
         if is_scanned_local:
             result_xlsx = process_inputs(pdf_path, out_xlsx=out_xlsx)
         else:
-            # PDF natif : utiliser ton process_pdf (extraction texte + tables natifs)
-            result_xlsx = process_pdf(pdf_path, out=out_xlsx)
+            result_xlsx = process_pdf(pdf_path, out_xlsx=out_xlsx)
+
+        # AJOUT DEBUG
+        print(f"DEBUG Flask: result_xlsx = {result_xlsx}")
+        print(f"DEBUG Flask: result_xlsx exists? {os.path.exists(result_xlsx) if result_xlsx else 'result_xlsx is None'}")
+
         if not result_xlsx:
             flash("Aucun résultat extrait par Gemini OCR.")
             return redirect(url_for('index'))
     except Exception as e:
+        print(f"DEBUG Flask: Exception = {e}")  # AJOUT
         flash(f"Erreur Gemini OCR : {e}")
         return redirect(url_for('index'))
 
     if not os.path.isfile(result_xlsx):
+        print(f"DEBUG Flask: Le fichier {result_xlsx} n'existe pas")  # AJOUT
         flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
         return redirect(url_for('index'))
 
+    print(f"DEBUG Flask: About to send file: {result_xlsx}")  # AJOUT
     return send_file(result_xlsx, as_attachment=True)
+
 
 
 

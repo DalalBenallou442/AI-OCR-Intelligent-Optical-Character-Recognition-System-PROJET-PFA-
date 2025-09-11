@@ -1,0 +1,422 @@
+[
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Capital social ou personnel (1)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Moins : actionnaires, capital souscritnon appelé",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Moins : Capital appelé",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Moins : Dont versé",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Prime d'émission, de fusion,d'apport",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Ecarts de réévaluation",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Réserve légale",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Autres réserves",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Report à nouveau (2)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Résultats nets en instance d'affectation(2)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Résultat net de l'exercice (2)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES (A)",
+    "Rubrique": "Total des capitaux propres (A)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES ASSIMILES (B)",
+    "Rubrique": "Capitaux propres assimilés (B)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES ASSIMILES (B)",
+    "Rubrique": "Subvention d'investissement",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "CAPITAUX PROPRES ASSIMILES (B)",
+    "Rubrique": "Provisions réglementées",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DE FINANCEMENT (C)",
+    "Rubrique": "Dettes de financement (C)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DE FINANCEMENT (C)",
+    "Rubrique": "Emprunts obligataires",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DE FINANCEMENT (C)",
+    "Rubrique": "Autres dettes de financement",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "PROVISIONS DURABLES POUR RISQUES ET CHARGES (D)",
+    "Rubrique": "Provisions durables pour risques et charges(D)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "PROVISIONS DURABLES POUR RISQUES ET CHARGES (D)",
+    "Rubrique": "Provisions pour risques",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "PROVISIONS DURABLES POUR RISQUES ET CHARGES (D)",
+    "Rubrique": "Provisions pour charges",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "ECARTS DE CONVERSION - PASSIF (E)",
+    "Rubrique": "Ecarts de conversion-passif (E)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "ECARTS DE CONVERSION - PASSIF (E)",
+    "Rubrique": "Augmentation des créances immobilisées",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "ECARTS DE CONVERSION - PASSIF (E)",
+    "Rubrique": "Diminution des dettes de financement",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TOTAL I (A+B+C+D+E)",
+    "Rubrique": "TOTAL I (A+B+C+D+E)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Dettes du passif circulant (F)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Fournisseurs et comptes rattachés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Clients créditeurs, avances et acomptes",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Personnel",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Organismes sociaux",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Etat",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Comptes d'associés",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Autres créanciers",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "DETTES DU PASSIF CIRCULANT (F)",
+    "Rubrique": "Comptes de régularisation passif",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "AUTRES PROVISIONS POUR RISQUES ET CHARGES (G)",
+    "Rubrique": "Autres provisions pour risques et charges(G)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "ECARTS DE CONVERSION - PASSIF (ELEMENTS CIRCULANTS) (H)",
+    "Rubrique": "Ecarts de conversion - passif (Elémentscirculants) (H)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TOTAL II (F+G+H)",
+    "Rubrique": "TOTAL II (F+G+H)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TRESORERIE - PASSIF",
+    "Rubrique": "Crédits d'escompte",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TRESORERIE - PASSIF",
+    "Rubrique": "Crédits de trésorerie",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TRESORERIE - PASSIF",
+    "Rubrique": "Banques (soldes créditeurs)",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TOTAL III",
+    "Rubrique": "TOTAL III",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_Passif",
+    "Sous_Categorie": "TOTAL GENERAL I+II+III",
+    "Rubrique": "TOTAL GENERAL I+II+III",
+    "Montant_Brut": "",
+    "Amortissements_Provisions": "",
+    "Net_Exercice": "",
+    "Net_Exercice_Prec": "",
+    "Commentaires": ""
+  }
+]
