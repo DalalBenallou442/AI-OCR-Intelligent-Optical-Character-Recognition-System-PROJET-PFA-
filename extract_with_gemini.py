@@ -5,6 +5,7 @@ Version: patch intégrant
  - mapping du JSON Gemini -> schéma interne attendu
  - fix normalize_sous_categories
  - debug prints supplémentaires
+ - ajout prise en charge d'un 3ème tableau "Bilan_CPC" (template / patching / sheet Excel)
 
 Ne nécessite pas pytesseract.
 """
@@ -67,6 +68,30 @@ PROMPT_PAGE_ONLY = PROMPT_BILAN_TABLEAU
 _re_number = re.compile(r'[-]?\(?\d{1,3}(?:[ \u00A0\d]{0,}\d)?[.,]\d{1,2}\)?|-?\d+')
 
 # ---------------- utilitaires nombres ----------------
+def best_match_name(lib, candidats, cutoff=0.55):
+    """
+    Retourne le meilleur candidat (str) dont la similarité avec lib dépasse cutoff.
+    Utilise difflib.get_close_matches.
+    """
+    from difflib import get_close_matches
+    lib_norm = normalize_str_for_match(lib)
+    candidats_norm = [normalize_str_for_match(c) for c in candidats]
+    matches = get_close_matches(lib_norm, candidats_norm, n=1, cutoff=cutoff)
+    if matches:
+        idx = candidats_norm.index(matches[0])
+        return candidats[idx]
+    return None
+
+def normalize_str_for_match(s):
+    if s is None:
+        return ""
+    s = str(s).lower().strip()
+    s = re.sub(r'[\s\-_]+', ' ', s)
+    s = re.sub(r'[^\w\s]', '', s)
+    # simplifications accents
+    s = s.replace('é', 'e').replace('è', 'e').replace('ê', 'e').replace('à', 'a').replace('ç', 'c')
+    return s
+
 def normalize_number_str(s):
     if s is None:
         return ""
@@ -163,20 +188,27 @@ def create_flat_template_from_hier(tpl_hier, type_tableau="Bilan_Actif"):
     return out
 
 def load_template_json(path):
+    """
+    Lit un template JSON. Supporte :
+     - liste (flat) -> retourne liste, numeric_keys détectés dynamiquement
+     - dictionnaire hiérarchique contenant Bilan_Actif ou Bilan_Passif -> aplatie
+    Remarque : si c'est une liste arbitraire (ex: Bilan_CPC.json fourni par l'utilisateur), on retourne tel quel.
+    """
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     if isinstance(data, list):
         sample = data[0] if data else {}
         numeric_keys = [k for k in sample.keys() if k not in ("Type_Tableau","Parent_Sous_Categorie","Sous_Categorie","Rubrique","Commentaires")]
         return data, numeric_keys
-    if isinstance(data, dict) and ("Bilan_Actif" in data or "Bilan_Passif" in data):
-        if "Bilan_Actif" in data:
-            flat = create_flat_template_from_hier(data, "Bilan_Actif")
-        else:
-            flat = create_flat_template_from_hier(data, "Bilan_Passif")
-        sample = flat[0] if flat else {}
-        numeric_keys = [k for k in sample.keys() if k not in ("Type_Tableau","Parent_Sous_Categorie","Sous_Categorie","Rubrique","Commentaires")]
-        return flat, numeric_keys
+    if isinstance(data, dict):
+        # si c'est une structure hiérarchique, chercher la première clé Bilan_* présente
+        for possible in ("Bilan_Actif", "Bilan_Passif", "Bilan_CPC"):
+            if possible in data:
+                flat = create_flat_template_from_hier(data, possible)
+                sample = flat[0] if flat else {}
+                numeric_keys = [k for k in sample.keys() if k not in ("Type_Tableau","Parent_Sous_Categorie","Sous_Categorie","Rubrique","Commentaires")]
+                return flat, numeric_keys
+        # fallback: erreur
     raise ValueError("Template JSON non reconnu (attendu liste ou structure hiérarchique).")
 
 def build_rubrique_to_sous_map(flat_template):
@@ -363,9 +395,13 @@ def find_numbers_near_label(page_text, label, window_lines=2):
     return out
 
 # -------------- template creation / ensure (modifié) ------------------
-def ensure_templates_exist(tpl_act_path="templates/bilan_actif.json", tpl_pass_path="templates/bilan_passif.json"):
+def ensure_templates_exist(tpl_act_path="templates/bilan_actif.json",
+                           tpl_pass_path="templates/bilan_passif.json",
+                           tpl_cpc_path="templates/bilan_cpc.json"):
     os.makedirs(os.path.dirname(tpl_act_path) or ".", exist_ok=True)
     os.makedirs(os.path.dirname(tpl_pass_path) or ".", exist_ok=True)
+    os.makedirs(os.path.dirname(tpl_cpc_path) or ".", exist_ok=True)
+
     if not os.path.exists(tpl_act_path):
         sample = [
             {
@@ -400,6 +436,24 @@ def ensure_templates_exist(tpl_act_path="templates/bilan_actif.json", tpl_pass_p
         with open(tpl_pass_path, "w", encoding="utf-8") as f:
             json.dump(sample, f, ensure_ascii=False, indent=2)
         if DEBUG: print(f"⚠️ Template passif manquant -> fichier placeholder créé : {tpl_pass_path}")
+    if not os.path.exists(tpl_cpc_path):
+        # Sample minimal CPC template (list style)
+        sample_cpc = [
+            {
+                "Type_Tableau": "Bilan_CPC",
+                "Parent_Sous_Categorie": "Exploitation",
+                "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+                "Rubrique": "PRODUITS D'EXPLOITATION",
+                "Propres a l'exercice": "",
+                "Concernant les exercices_prec": "",
+                "Totaux de l'exercice": "",
+                "Exercice_prec": "",
+                "Commentaires": ""
+            }
+        ]
+        with open(tpl_cpc_path, "w", encoding="utf-8") as f:
+            json.dump(sample_cpc, f, ensure_ascii=False, indent=2)
+        if DEBUG: print(f"⚠️ Template CPC manquant -> fichier placeholder créé : {tpl_cpc_path}")
 
 # -------------- call_gemini (tolérant) -------------------
 def call_gemini(content, model_name="gemini-1.5-flash"):
@@ -438,6 +492,14 @@ def extract_text_from_pdf_page(page):
 def page_to_base64_image_bytes(page, zoom=2):
     pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), alpha=False)
     return pix.tobytes("png")
+
+TECH_COLS = ["_matched_from_page", "_matched_name_raw", "_source"]
+
+def ensure_tech_cols(df):
+    for col in TECH_COLS:
+        if col not in df.columns:
+            df[col] = None
+    return df
 
 # -------------- LLM JSON -> internal mapping (NEW) --------------
 def map_gemini_json_to_internal(rows):
@@ -521,30 +583,39 @@ def normalize_sous_categories(df):
     return df
 
 def fill_missing_rubriques(df, type_tableau, fill_with_zero=False):
-    if fill_with_zero:
-        for col in ["Montant_Brut","Amortissements_Provisions","Net_Exercice","Net_Exercice_Prec"]:
+    # For CPC templates numeric fields may have different names; this helper keeps original behaviour for Bilan_Actif
+    if fill_with_zero and isinstance(df, pd.DataFrame):
+        numeric_cols = ["Montant_Brut","Amortissements_Provisions","Net_Exercice","Net_Exercice_Prec"]
+        for col in numeric_cols:
             if col in df.columns:
                 df[col] = df[col].apply(lambda x: "0.00" if (x in (None,"") or (isinstance(x, float) and pd.isna(x))) else x)
     return df
 
 # -------------- Main processing (template-first) ----------------
-def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
+def process_pdf_with_templates(pdf_path,
+                               tpl_act_path="templates/bilan_actif.json",
+                               tpl_pass_path="templates/bilan_passif.json",
+                               tpl_cpc_path="templates/bilan_cpc.json",
                                use_gemini=True, reverse_numbers=False, out_xlsx=None, fill_with_zero=False, zoom=2):
-    ensure_templates_exist(tpl_act_path, tpl_pass_path)
+    ensure_templates_exist(tpl_act_path, tpl_pass_path, tpl_cpc_path)
 
     tpl_act, num_keys_act = load_template_json(tpl_act_path)
     tpl_pass, num_keys_pass = load_template_json(tpl_pass_path)
+    tpl_cpc, num_keys_cpc = load_template_json(tpl_cpc_path)
 
     rub_to_sous_act, rub_to_parent_act, candidats_act = build_rubrique_to_sous_map(tpl_act)
     rub_to_sous_pass, rub_to_parent_pass, candidats_pass = build_rubrique_to_sous_map(tpl_pass)
+    rub_to_sous_cpc,  rub_to_parent_cpc,  candidats_cpc  = build_rubrique_to_sous_map(tpl_cpc)
 
     if DEBUG:
-        print("Templates chargés -> Actif:", len(tpl_act), "Passif:", len(tpl_pass))
+        print("Templates chargés -> Actif:", len(tpl_act), "Passif:", len(tpl_pass), "CPC:", len(tpl_cpc))
         print("Candidats Actif exemples:", candidats_act[:8])
+        print("Candidats CPC exemples:", candidats_cpc[:8])
 
     doc = fitz.open(pdf_path)
     patched_act = []
     patched_pass = []
+    patched_cpc = []
 
     for p_index, page in enumerate(doc):
         if DEBUG: print(f"--- page {p_index+1}/{len(doc)} ---")
@@ -622,49 +693,135 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
         rows_raw = rows
         rows, subtotals = postprocess_llm_rows(rows_raw)
 
+        # ---------- Matching robuste : départage Actif vs Passif vs CPC ----------
         for r in rows:
             lib = str(r.get("Rubrique","")).strip()
             if not lib:
                 continue
 
             lib_norm = normalize_str_for_match(lib)
-            matched_sous = rub_to_sous_act.get(lib_norm) or rub_to_sous_pass.get(lib_norm)
 
-            matched = None
-            if not matched_sous:
-                matched = best_match_name(lib, candidats_act, cutoff=0.65)
-                if matched:
-                    matched_sous = rub_to_sous_act.get(normalize_str_for_match(matched))
-                else:
-                    matched = best_match_name(lib, candidats_pass, cutoff=0.65)
-                    if matched:
-                        matched_sous = rub_to_sous_pass.get(normalize_str_for_match(matched))
+            # Meilleur candidat côté passif, actif, cpc
+            matched_pass = best_match_name(lib, candidats_pass, cutoff=0.55)
+            matched_act  = best_match_name(lib, candidats_act,  cutoff=0.55)
+            matched_cpc  = best_match_name(lib, candidats_cpc,  cutoff=0.55)
 
-            if matched_sous:
-                r["Sous_Categorie"] = matched_sous
+            # Similarité pour départager
+            from difflib import SequenceMatcher
+            def similarity(a, b):
+                if not a or not b:
+                    return 0.0
+                return SequenceMatcher(None, normalize_str_for_match(a), normalize_str_for_match(b)).ratio()
+
+            score_pass = similarity(lib, matched_pass) if matched_pass else 0.0
+            score_act  = similarity(lib, matched_act)  if matched_act  else 0.0
+            score_cpc  = similarity(lib, matched_cpc)  if matched_cpc  else 0.0
+
+            if DEBUG:
+                print(f"[MATCH DEBUG] '{lib[:80]}' -> passif:{matched_pass} (s{score_pass:.3f}) | actif:{matched_act} (s{score_act:.3f}) | cpc:{matched_cpc} (s{score_cpc:.3f})")
+
+            # Règles de décision multi-côtés
+            threshold = 0.45   # score min pour accepter un match
+            # on prend le max score si suffisamment au-dessus des autres
+            scores = {"passif": score_pass, "actif": score_act, "cpc": score_cpc}
+            best_side = max(scores, key=scores.get)
+            best_score = scores[best_side]
+            # second best
+            sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+            second_best_score = sorted_scores[1][1] if len(sorted_scores) > 1 else 0.0
+            delta = 0.07
+
+            chosen_side = None
+            chosen_matched = None
+            if best_score >= threshold and (best_score - second_best_score > delta):
+                chosen_side = best_side
             else:
-                if not r.get("Type_Tableau"):
-                    r["Type_Tableau"] = "Bilan_Actif"
+                # scores trop proches -> regarder le contexte page (mot 'actif'/'passif'/'produit'/'charges' etc)
+                ptxt = (page_text or "").lower()
+                if "passif" in ptxt and "actif" not in ptxt:
+                    chosen_side = "passif"
+                elif "actif" in ptxt and "passif" not in ptxt:
+                    chosen_side = "actif"
+                else:
+                    # essayer détecter mot-cle CPC (produit/charge/chiffre d'affaire)
+                    if any(k in lib.lower() for k in ["vente", "produit", "charge", "exploitation", "chiffre"]):
+                        chosen_side = "cpc"
+                    else:
+                        # fallback: côté meilleur score même si proche
+                        chosen_side = best_side
 
+            if chosen_side == "passif":
+                chosen_matched = matched_pass
+            elif chosen_side == "actif":
+                chosen_matched = matched_act
+            else:
+                chosen_matched = matched_cpc
+
+            if not chosen_matched:
+                if DEBUG:
+                    print("Aucun candidat choisi pour:", lib)
+                continue
+
+            # Sélection du template / keys selon le côté choisi
+            if chosen_side == "passif":
+                tpl_list = tpl_pass
+                nkeys = num_keys_pass
+                rub_to_parent = rub_to_parent_pass
+            elif chosen_side == "actif":
+                tpl_list = tpl_act
+                nkeys = num_keys_act
+                rub_to_parent = rub_to_parent_act
+            else:
+                tpl_list = tpl_cpc
+                nkeys = num_keys_cpc
+                rub_to_parent = rub_to_parent_cpc
+
+            keym = normalize_str_for_match(chosen_matched)
+            tpl_entries = [t for t in tpl_list if normalize_str_for_match(t.get("Rubrique","")) == keym]
+            if not tpl_entries:
+                tpl_entries = [t for t in tpl_list if t.get("Rubrique","") == chosen_matched]
+            if not tpl_entries:
+                if DEBUG:
+                    print("Template entry introuvable malgré match -> skip", chosen_matched)
+                continue
+
+            # Récupération / normalisation des nombres (mapping spécifique à chaque bilan)
+            if chosen_side == "actif":
+                mapped_fields = [
+                    r.get("Montant_Brut", ""),
+                    r.get("Amortissements_Provisions", ""),
+                    r.get("Net_Exercice", ""),
+                    r.get("Net_Exercice_Prec", "")
+                ]
+            elif chosen_side == "passif":
+                mapped_fields = [
+                    r.get("Net_Exercice", ""),
+                    r.get("Net_Exercice_Prec", "")
+                ]
+            elif chosen_side == "cpc":
+                mapped_fields = [
+                    r.get("Propres a l'exercice", ""),
+                    r.get("Concernant les exercices_prec", ""),
+                    r.get("Totaux de l'exercice", ""),
+                    r.get("Exercice_prec", "")
+                ]
+            else:
+                mapped_fields = []
+
+            mapped_nums = [normalize_number_str(x) for x in mapped_fields if x not in (None,"") and normalize_number_str(x) != ""]
+
+            # Initialisation par défaut
             nums_norm = []
-            # 1) If the row already contains explicit numeric fields (from map_gemini_json_to_internal),
-            #    use them in the template order (Montant_Brut, Amortissements_Provisions, Net_Exercice, Net_Exercice_Prec).
-            mapped_fields = [
-                r.get("Montant_Brut", ""),
-                r.get("Amortissements_Provisions", ""),
-                r.get("Net_Exercice", ""),
-                r.get("Net_Exercice_Prec", "")
-            ]
-            mapped_nums = [normalize_number_str(x) for x in mapped_fields if x not in (None, "") and normalize_number_str(x) != ""]
 
+            # ... mapping spécifique à chaque bilan ...
             if mapped_nums:
                 nums_norm = mapped_nums
                 if DEBUG:
                     print("Using mapped numeric fields for:", lib, "->", nums_norm)
             else:
-                # 2) Fallback: extract numbers by scanning the row values (legacy behavior)
                 nums = []
                 for v in r.values():
+                    sv = ""
                     try:
                         sv = str(v)
                     except:
@@ -679,8 +836,6 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
                     found = _re_number.findall(line_text)
                     nums = found
                 nums_norm = [normalize_number_str(n) for n in nums if normalize_number_str(n) != ""]
-
-                # fallback search near label in page text (existing logic)
                 if not nums_norm:
                     nums_near = find_numbers_near_label(page_text, lib, window_lines=2)
                     if nums_near:
@@ -688,74 +843,57 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
                             print("Fallback numbers found near label:", lib, "->", nums_near)
                         nums_norm = nums_near
 
-            ptxt = (page_text + " " + lib).lower()
-            tt = None
-            if "passif" in ptxt and "actif" not in ptxt:
-                tt = "Bilan_Passif"
-            elif "actif" in ptxt and "passif" not in ptxt:
-                tt = "Bilan_Actif"
-
-            matched = None
-            if tt == "Bilan_Passif":
-                matched = best_match_name(lib, candidats_pass, cutoff=0.55)
-            elif tt == "Bilan_Actif":
-                matched = best_match_name(lib, candidats_act, cutoff=0.55)
-            else:
-                matched = best_match_name(lib, candidats_act, cutoff=0.55) or best_match_name(lib, candidats_pass, cutoff=0.55)
-
-            if not matched:
-                if DEBUG:
-                    print("Aucun match template pour (ignoring):", lib[:120])
-                continue
-
-            if matched in candidats_pass:
-                tpl_list = tpl_pass; nkeys = num_keys_pass; side = "passif"
-            else:
-                tpl_list = tpl_act; nkeys = num_keys_act; side = "actif"
-
-            tpl_entries = [t for t in tpl_list if normalize_str_for_match(t.get("Rubrique","")) == normalize_str_for_match(matched)]
-            if not tpl_entries:
-                tpl_entries = [t for t in tpl_list if t.get("Rubrique","") == matched]
-            if not tpl_entries:
-                if DEBUG: print("Template entry introuvable malgré match -> skip")
-                continue
-
             if reverse_numbers:
                 nums_norm = list(reversed(nums_norm))
 
+            aligned_vals = align_numbers(nums_norm, nkeys)
             newrow = tpl_entries[0].copy()
             for i, nk in enumerate(nkeys):
-                if i < len(nums_norm):
-                    val = nums_norm[i]
+                val = aligned_vals[i]
+                if val not in (None, ""):
                     newrow[nk] = val
             if r.get("Sous_Categorie"):
                 newrow["Sous_Categorie"] = r.get("Sous_Categorie")
 
+            # Parent selon côté
             if not newrow.get("Parent_Sous_Categorie"):
-                keym = normalize_str_for_match(matched)
-                parent_mapped = rub_to_parent_act.get(keym) if side=="actif" else rub_to_parent_pass.get(keym)
+                parent_mapped = rub_to_parent.get(keym)
                 if parent_mapped:
                     newrow["Parent_Sous_Categorie"] = parent_mapped
 
             newrow["_matched_from_page"] = p_index+1
             newrow["_matched_name_raw"] = lib
             newrow["_source"] = "gemini_page"
-            if side == "actif":
+
+            if chosen_side == "passif":
+                patched_pass.append(newrow)
+            elif chosen_side == "actif":
                 patched_act.append(newrow)
             else:
-                patched_pass.append(newrow)
+                patched_cpc.append(newrow)
+
+    # DEBUG print pour vérification
+    if DEBUG:
+        print(">>> patched_act count:", len(patched_act))
+        print(">>> patched_pass count:", len(patched_pass))
+        print(">>> patched_cpc count:", len(patched_cpc))
+        if patched_act:  print("patched_act sample:", patched_act[:5])
+        if patched_pass: print("patched_pass sample:", patched_pass[:5])
+        if patched_cpc:  print("patched_cpc sample:", patched_cpc[:5])
 
     doc.close()
 
     if DEBUG:
         print("patched_act sample:", patched_act[:8])
         print("patched_pass sample:", patched_pass[:8])
+        print("patched_cpc sample:", patched_cpc[:8])
 
     def merge_template_with_patches(template_list, patched_rows, numeric_keys):
         out = []
         patch_map = {}
         for p in patched_rows:
             key = normalize_str_for_match(p.get("Rubrique",""))
+            # keep first patch encountered (last one wins if repeated)
             patch_map[key] = p
         for t in template_list:
             keyt = normalize_str_for_match(t.get("Rubrique",""))
@@ -768,21 +906,27 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
                         row[nk] = val
                 row["_matched_from_page"] = p.get("_matched_from_page")
                 row["_matched_name_raw"] = p.get("_matched_name_raw")
+                row["_source"] = p.get("_source", "")
                 out.append(row)
             else:
                 out.append(t.copy())
         return out
 
-    merged_act = merge_template_with_patches(tpl_act, patched_act, num_keys_act)
+    # === Merge templates with patches ===
     merged_pass = merge_template_with_patches(tpl_pass, patched_pass, num_keys_pass)
+    merged_act  = merge_template_with_patches(tpl_act, patched_act, num_keys_act)
+    merged_cpc  = merge_template_with_patches(tpl_cpc, patched_cpc, num_keys_cpc)
 
     df_act = pd.DataFrame(merged_act) if merged_act else pd.DataFrame(tpl_act)
     df_pass = pd.DataFrame(merged_pass) if merged_pass else pd.DataFrame(tpl_pass)
+    df_cpc = pd.DataFrame(merged_cpc) if merged_cpc else pd.DataFrame(tpl_cpc)
 
     df_act = df_act.fillna("")
     df_pass = df_pass.fillna("")
+    df_cpc = df_cpc.fillna("")
 
-    for df in (df_act, df_pass):
+    # Normalisation colonnes numériques (sauf colonnes matched/raw/source)
+    for df in (df_act, df_pass, df_cpc):
         if df is None or df.empty:
             continue
         for col in df.columns:
@@ -798,19 +942,33 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
             df_act["Type_Tableau"] = df_act.get("Type_Tableau", "Bilan_Actif")
             if "Sous_Categorie" in df_act.columns:
                 df_act = normalize_sous_categories(df_act)
+            df_act = ensure_tech_cols(df_act)
+
         if not df_pass.empty:
             df_pass["Type_Tableau"] = df_pass.get("Type_Tableau", "Bilan_Passif")
             if "Sous_Categorie" in df_pass.columns:
                 df_pass = normalize_sous_categories(df_pass)
+            df_pass = ensure_tech_cols(df_pass)
+
+        if not df_cpc.empty:
+            df_cpc["Type_Tableau"] = df_cpc.get("Type_Tableau", "Bilan_CPC")
+            df_cpc = ensure_tech_cols(df_cpc)
     except Exception as e:
         if DEBUG: print("Warning normalisation Sous_Categorie:", e)
 
     try:
         df_act = df_act.fillna("")
         df_pass = df_pass.fillna("")
+        df_cpc = df_cpc.fillna("")
 
         if not df_act.empty and set(["Montant_Brut","Amortissements_Provisions","Net_Exercice","Net_Exercice_Prec"]).issubset(set(df_act.columns)):
-            df_act2 = df_act[["Type_Tableau","Parent_Sous_Categorie","Sous_Categorie","Rubrique","Montant_Brut","Amortissements_Provisions","Net_Exercice","Net_Exercice_Prec","Commentaires"]]
+            cols_keep = [
+                "Type_Tableau","Parent_Sous_Categorie","Sous_Categorie","Rubrique",
+                "Montant_Brut","Amortissements_Provisions","Net_Exercice","Net_Exercice_Prec",
+                "Commentaires","_matched_from_page","_matched_name_raw","_source"
+            ]
+            cols_present = [c for c in cols_keep if c in df_act.columns]
+            df_act2 = df_act[cols_present].copy()
             df_act = fill_missing_rubriques(df_act2, "Bilan_Actif", fill_with_zero=fill_with_zero)
     except Exception as e:
         if DEBUG: print("Warning fill_missing_rubriques:", e)
@@ -825,99 +983,129 @@ def process_pdf_with_templates(pdf_path, tpl_act_path, tpl_pass_path,
 
     excel_written = False
     try:
+        # -> Construire un dictionnaire sheet_name -> dataframe
+        sheets = {}
+
+        # On privilégie df_act / df_pass / df_cpc s'ils existent
+        if df_act is not None and not df_act.empty:
+            sheets["Bilan_Actif"] = df_act
+        elif tpl_act:
+            sheets["Bilan_Actif"] = pd.DataFrame(tpl_act)
+
+        if df_pass is not None and not df_pass.empty:
+            sheets["Bilan_Passif"] = df_pass
+        elif tpl_pass:
+            sheets["Bilan_Passif"] = pd.DataFrame(tpl_pass)
+
+        if df_cpc is not None and not df_cpc.empty:
+            sheets["Bilan_CPC"] = df_cpc
+        elif tpl_cpc:
+            sheets["Bilan_CPC"] = pd.DataFrame(tpl_cpc)
+
+        # Au cas où il y aurait d'autres Type_Tableau dans merged_* non couverts :
+        def add_by_type(df, default_name_prefix="Feuille"):
+            if df is None or df.empty:
+                return
+            if "Type_Tableau" in df.columns:
+                for ttype, sub in df.groupby("Type_Tableau"):
+                    name = str(ttype).strip() or default_name_prefix
+                    if name not in sheets:
+                        sheets[name] = sub.reset_index(drop=True)
+
+        add_by_type(df_act)
+        add_by_type(df_pass)
+        add_by_type(df_cpc)
+
+        # Si pour une quelconque raison sheets est vide (fallback)
+        if not sheets:
+            sheets["Actif"] = pd.DataFrame(tpl_act) if tpl_act else pd.DataFrame()
+            sheets["Passif"] = pd.DataFrame(tpl_pass) if tpl_pass else pd.DataFrame()
+            sheets["CPC"] = pd.DataFrame(tpl_cpc) if tpl_cpc else pd.DataFrame()
+
+        # Ecrire chaque dataframe dans sa propre feuille
         with pd.ExcelWriter(out_xlsx, engine="openpyxl") as writer:
-            if not df_act.empty:
-                df_act.to_excel(writer, sheet_name="Actif", index=False)
-            else:
-                pd.DataFrame(tpl_act).to_excel(writer, sheet_name="Actif", index=False)
-            if not df_pass.empty:
-                df_pass.to_excel(writer, sheet_name="Passif", index=False)
-            else:
-                pd.DataFrame(tpl_pass).to_excel(writer, sheet_name="Passif", index=False)
+            for sheet_name, df_sheet in sheets.items():
+                safe_name = sheet_name[:31]
+                if df_sheet is None:
+                    df_sheet = pd.DataFrame()
+                try:
+                    df_sheet.to_excel(writer, sheet_name=safe_name, index=False)
+                except Exception as e:
+                    alt = safe_name[:25] + "_1"
+                    if DEBUG: print(f"Warning écriture feuille {safe_name} failed -> try {alt} :", e)
+                    df_sheet.to_excel(writer, sheet_name=alt, index=False)
+
         excel_written = os.path.isfile(out_xlsx)
         if excel_written and DEBUG:
-            print("✅ Excel écrit:", out_xlsx)
+            print("✅ Excel écrit (feuilles):", out_xlsx, "sheets:", list(sheets.keys()))
     except Exception as e:
         if DEBUG:
             print("❌ Erreur écriture Excel :", repr(e))
         try:
             csv_act = os.path.join(out_dir, Path(out_xlsx).stem + "_Actif.csv")
             csv_pass = os.path.join(out_dir, Path(out_xlsx).stem + "_Passif.csv")
-            if not df_act.empty:
-                df_act.to_csv(csv_act, index=False, encoding='utf-8-sig')
-            else:
-                pd.DataFrame(tpl_act).to_csv(csv_act, index=False, encoding='utf-8-sig')
-            if not df_pass.empty:
-                df_pass.to_csv(csv_pass, index=False, encoding='utf-8-sig')
-            else:
-                pd.DataFrame(tpl_pass).to_csv(csv_pass, index=False, encoding='utf-8-sig')
+            csv_cpc = os.path.join(out_dir, Path(out_xlsx).stem + "_CPC.csv")
             if DEBUG:
-                print("✅ Fallback CSV écrits:", csv_act, csv_pass)
-            out_xlsx = csv_act
-            excel_written = True
-        except Exception as e2:
+                print("Tentative écriture CSV de secours :", csv_act, csv_pass, csv_cpc)
+            if df_act is not None and not df_act.empty:
+                df_act.to_csv(csv_act, index=False, sep=";")
+            if df_pass is not None and not df_pass.empty:
+                df_pass.to_csv(csv_pass, index=False, sep=";")
+            if df_cpc is not None and not df_cpc.empty:
+                df_cpc.to_csv(csv_cpc, index=False, sep=";")
+            excel_written = os.path.isfile(csv_act) or os.path.isfile(csv_pass) or os.path.isfile(csv_cpc)
+        except Exception as e:
             if DEBUG:
-                print("❌ Erreur fallback CSV:", repr(e2))
-            excel_written = False
+                print("❌ Erreur écriture CSV de secours :", repr(e))
 
-    if not excel_written:
-        if DEBUG:
-            print("⚠️ Aucun fichier de sortie généré.")
-        return None
+    if DEBUG:
+        print("Traitement terminé. Fichier de sortie :", out_xlsx)
 
     return out_xlsx
 
-# -------------- normalize_str_for_match / best_match / safe_json_extract --------------
-def normalize_str_for_match(s):
-    if s is None: return ""
-    s = str(s).lower().strip()
-    s = re.sub(r'[\(\)\[\]\.,;:–—\-\/\u00A0]', ' ', s)
-    s = re.sub(r'\s+', ' ', s).strip()
-    return s
-
-def best_match_name(name, candidates, cutoff=0.60):
-    if not name or not candidates:
-        return None
-    n = normalize_str_for_match(name)
-    cand_norm = {normalize_str_for_match(c): c for c in candidates}
-    if n in cand_norm:
-        return cand_norm[n]
-    for k,v in cand_norm.items():
-        if n in k or k in n:
-            return v
-    matches = difflib.get_close_matches(n, list(cand_norm.keys()), n=1, cutoff=cutoff)
-    if matches:
-        return cand_norm[matches[0]]
-    return None
-
 def safe_json_extract(text):
-    if not text:
-        return []
-    match = re.search(r"\[.*\]", text, re.S)
-    if not match:
-        if DEBUG:
-            print("⚠️ Aucun JSON détecté dans la réponse LLM (preview).")
-        return []
-    raw = match.group(0)
+    """
+    Essaie d'extraire une liste d'objets JSON depuis un texte Gemini.
+    Retourne [] si rien n'est extrait.
+    """
+    import json
     try:
-        data = json.loads(raw)
-        return data if isinstance(data, list) else []
-    except Exception as e:
+        text = text.strip()
+        if text.startswith("```json"):
+            text = text[7:]
+        if text.endswith("```"):
+            text = text[:-3]
+        # Parfois Gemini renvoie du texte + JSON, tenter d'extraire le premier tableau JSON
+        match = re.search(r'(\[.*\])', text, re.S)
+        if match:
+            raw = match.group(1)
+            data = json.loads(raw)
+            return data if isinstance(data, list) else [data]
+        # fallback: essayer de charger tout
+        obj = json.loads(text)
+        if isinstance(obj, list):
+            return obj
+        if isinstance(obj, dict):
+            return [obj]
+        return []
+    except Exception:
+        # fallback permissif: retour vide si pas JSON valide
         if DEBUG:
-            print("⚠️ JSON non valide après extraction :", e)
-            print("Snippet JSON:", raw[:500])
+            print("safe_json_extract: impossible d'extraire JSON. snippet:", text[:200])
         return []
 
 # ------------- wrapper utilisé par Flask ----------------
-def process_inputs(pdf_path, out_xlsx=None):
-    tpl_act = "templates/bilan_actif.json"
-    tpl_pass = "templates/bilan_passif.json"
-    ensure_templates_exist(tpl_act, tpl_pass)
+def process_inputs(pdf_path, out_xlsx=None,
+                   tpl_act="templates/bilan_actif.json",
+                   tpl_pass="templates/bilan_passif.json",
+                   tpl_cpc="templates/bilan_cpc.json"):
+    ensure_templates_exist(tpl_act, tpl_pass, tpl_cpc)
 
     result = process_pdf_with_templates(
         pdf_path,
-        tpl_act,
-        tpl_pass,
+        tpl_act_path=tpl_act,
+        tpl_pass_path=tpl_pass,
+        tpl_cpc_path=tpl_cpc,
         use_gemini=True,
         reverse_numbers=False,
         out_xlsx=out_xlsx,
@@ -936,12 +1124,29 @@ if __name__ == "__main__":
     parser.add_argument("--pdf", "-p", help="Chemin vers le PDF à traiter", required=False)
     parser.add_argument("--tpl_act", help="Template actif JSON", default="templates/bilan_actif.json")
     parser.add_argument("--tpl_pass", help="Template passif JSON", default="templates/bilan_passif.json")
+    parser.add_argument("--tpl_cpc", help="Template cpc JSON", default="templates/bilan_cpc.json")
     parser.add_argument("--out", "-o", help="Chemin de sortie Excel (optionnel)", default=None)
     parser.add_argument("--use_gemini", action="store_true", help="Activer Gemini (si clés configurées)")
     args = parser.parse_args()
     if not args.pdf:
         print("Aucun PDF fourni. Exemple : python extract_with_gemini.py --pdf /chemin/file.pdf --use_gemini")
         exit(0)
-    ensure_templates_exist(args.tpl_act, args.tpl_pass)
-    out = process_pdf_with_templates(args.pdf, args.tpl_act, args.tpl_pass, use_gemini=args.use_gemini, out_xlsx=args.out)
+    ensure_templates_exist(args.tpl_act, args.tpl_pass, args.tpl_cpc)
+    out = process_pdf_with_templates(args.pdf,
+                                    tpl_act_path=args.tpl_act,
+                                    tpl_pass_path=args.tpl_pass,
+                                    tpl_cpc_path=args.tpl_cpc,
+                                    use_gemini=args.use_gemini,
+                                    out_xlsx=args.out)
     print("Result:", out)
+
+def align_numbers(nums, keys):
+    L = len(keys)
+    out = [''] * L
+    if not nums:
+        return out
+    take = nums[-L:] if len(nums) >= L else nums
+    start = L - len(take)
+    for idx, v in enumerate(take):
+        out[start + idx] = v
+    return out

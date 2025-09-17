@@ -68,6 +68,15 @@
         <div class="card-body text-center">
           <h5 class="card-title text-success mb-3">PDF non scanné (natif)</h5>
           <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="client_id_natif" class="form-label">Choisir un client :</label>
+              <select name="client_id" id="client_id_natif" class="form-select" required>
+                <option value="">-- Sélectionner --</option>
+                {% for client in clients %}
+                  <option value="{{ client[0] }}">{{ client[0] }} - {{ client[1] }}</option>
+                {% endfor %}
+              </select>
+            </div>
             <input type="file" name="file" class="form-control mb-3" accept="application/pdf" required>
             <button type="submit" class="btn w-100 fancy-btn">Extraire le PDF </button>
           </form>
@@ -79,6 +88,15 @@
         <div class="card-body text-center">
           <h5 class="card-title text-primary mb-3">PDF scanné (image)</h5>
           <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="client_id_scan" class="form-label">Choisir un client :</label>
+              <select name="client_id" id="client_id_scan" class="form-select" required>
+                <option value="">-- Sélectionner --</option>
+                {% for client in clients %}
+                  <option value="{{ client[0] }}">{{ client[0] }} - {{ client[1] }}</option>
+                {% endfor %}
+              </select>
+            </div>
             <input type="file" name="file" class="form-control mb-3" accept="application/pdf,image/png,image/jpeg,image/jpg" required>
             <button type="submit" class="btn w-100 fancy-btn btn-warning">Extraire le PDF</button>
           </form>
@@ -123,6 +141,8 @@
     </div>
   </div>
   {% endif %}
+
+ 
 
 </div>
 

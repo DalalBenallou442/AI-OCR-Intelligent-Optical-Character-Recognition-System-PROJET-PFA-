@@ -1,5 +1,24 @@
-# Application Flask pour uploader un PDF, le traiter avec process_pdf (ocr.py)
-# et renvoyer un fichier Excel généré.
+import mysql.connector
+
+def get_clients():
+    """Récupère la liste des clients depuis la table CLIENTS"""
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",      # ou l’IP de ton serveur MySQL
+            user="root",           # ton user MySQL
+            password="", # ton mot de passe MySQL
+            database="ocr_system"
+        )
+        cursor = conn.cursor()
+        cursor.execute("SELECT ID_CLIENT, NOM_CLIENT FROM CLIENT ORDER BY ID_CLIENT")
+        clients = cursor.fetchall()  
+        cursor.close()
+        conn.close()
+        return clients
+    except Exception as e:
+        print("Erreur MySQL:", e)
+        return []
+
 import os
 import uuid
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash, jsonify, send_file
@@ -83,6 +102,8 @@ def index():
     is_scanned = False
 
     if request.method == 'POST':
+        client_id = request.form.get('client_id')
+
         # Vérifie que le champ 'file' est présent
         if 'file' not in request.files:
             flash("Aucun fichier reçu (champ 'file' manquant).")
@@ -126,7 +147,8 @@ def index():
             flash(f"Fichier uploadé avec succès (PDF natif détecté) : {original_name}")
 
     # Rend la page d'accueil (template index.html) en envoyant le nom du fichier uploadé si présent
-    return render_template('index.html', filename=filename, is_scanned=is_scanned)
+    clients = get_clients()
+    return render_template('index.html', filename=filename, is_scanned=is_scanned, clients=clients)
 
 
 # --- Route d'extraction : appelle process_pdf et renvoie l'Excel ---
@@ -284,4 +306,12 @@ def extract_excel_gemini():
 
 # --- Lancement ---
 if __name__ == "__main__":
+    # Test de connexion MySQL
+    print("Test connexion MySQL...")
+    clients = get_clients()
+    if clients:
+        print(f"Connexion OK, {len(clients)} clients trouvés.")
+    else:
+        print("Connexion échouée ou aucun client trouvé.")
+    # Tu peux ensuite lancer Flask normalement
     app.run(debug=True, port=5001)

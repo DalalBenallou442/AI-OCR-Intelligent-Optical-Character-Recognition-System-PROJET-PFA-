@@ -1,0 +1,616 @@
+[
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "PRODUITS D'EXPLOITATION",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Ventes de marchandises",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Ventes de biens et services produites ",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Chiffres d'affaires",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Variation de stock de produits",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Immobilisationsproduites pour l'Ese p/elle meme",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Subvention d'exploitation",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Autres produits d'exploitation",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "PRODUITS D'EXPLOITATION",
+    "Rubrique": "Reprises d'exploitation; transfert de charges",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+    {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "TOTAL I ",
+    "Rubrique": "TOTAL I",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "CHARGES D'EXPLOITATION",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Achats revendus de marchandises",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Achats consommes de matieres et de fournitures",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Autres charges externes",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Impots et taxes",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Charges de personnel",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Autres charges d'exploitation",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+    {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "CHARGES D'EXPLOITATION",
+    "Rubrique": "Dotations d'exploitation",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "TOTAL II",
+    "Rubrique": "TOTAL II",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "Exploitation",
+    "Sous_Categorie": "RESULTAT D'EXPLOITATION (I-II)",
+    "Rubrique": "RESULTAT D'EXPLOITATION (I-II)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "PRODUITS FINANCIERS",
+    "Rubrique": "PRODUITS FINANCIERS",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "PRODUITS FINANCIERS",
+    "Rubrique": "Produits des titres de partic et autres titre immo",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "PRODUITS FINANCIERS",
+    "Rubrique": "Gains de change",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "PRODUITS FINANCIERS",
+    "Rubrique": "Interets et autres produits financiers",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "PRODUITS FINANCIERS",
+    "Rubrique": "Reprises financiere; transfert de charges",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "TOTAL IV",
+    "Rubrique": "TOTAL IV",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+ {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "CHARGES FINANCIERES",
+    "Rubrique": "CHARGES FINANCIERES",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "CHARGES FINANCIERES",
+    "Rubrique": "Charges d'interets",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+ 
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "CHARGES FINANCIERES",
+    "Rubrique": "Pertes de changes",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "CHARGES FINANCIERES",
+    "Rubrique": "Autres charges financieres",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "CHARGES FINANCIERES",
+    "Rubrique": "Dotations fianancieres",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "TOTAL V",
+    "Rubrique": "TOTAL V",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+ {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "FINANCIER",
+    "Sous_Categorie": "RESULTAT FINANCIER (IV - V)",
+    "Rubrique": "RESULTAT FINANCIER (IV - V)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "RESULTAT COURANT (III - VI)",
+    "Sous_Categorie": "RESULTAT COURANT (III - VI)",
+    "Rubrique": "RESULTAT COURANT (III - VI)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "RESULTAT COURANT (Report)",
+    "Sous_Categorie": "RESULTAT COURANT (Report)",
+    "Rubrique": "RESULTAT COURANT (Report)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+    {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "PRODUITS NON COURANTS",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "Produits des cessions d'immobilisations",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "Subventions d'equilibre",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "Reprises sur subventions d'investissement",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "Autres produits non courants",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "PRODUITS NON COURANTS",
+    "Rubrique": "Reprises non courantes; transferts de charges",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "TOTAL VII",
+    "Rubrique": "TOTAL VII",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "CHARGES NON COURANTES",
+    "Rubrique": "CHARGES NON COURANTES",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "CHARGES NON COURANTES",
+    "Rubrique": "Valeurs nettes d'amortis des immo cedees",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "CHARGES NON COURANTES",
+    "Rubrique": "Subventions accordees",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "CHARGES NON COURANTES",
+    "Rubrique": "Autres charges non courantes",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "CHARGES NON COURANTES",
+    "Rubrique": "Dotations non courantes aux amortiss et prov",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+  
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "TOTAL IX",
+    "Rubrique": "TOTAL IX",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "NON COURANT",
+    "Sous_Categorie": "RESULTAT NON COURANT (VIII - IV)",
+    "Rubrique": "RESULTAT NON COURANT (VIII - IV)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": ""
+  },
+
+  {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "RESULTAT AVANT IMPOTS (VII - X)",
+    "Sous_Categorie": "RESULTAT AVANT IMPOTS (VII - X)",
+    "Rubrique": "RESULTAT AVANT IMPOTS (VII - X)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "IMPOTS SUR LES RESULTATS",
+    "Sous_Categorie": "IMPOTS SUR LES RESULTATS",
+    "Rubrique": "IMPOTS SUR LES RESULTATS",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "RESULTAT NET (XI-XII)",
+    "Sous_Categorie": "RESULTAT NET (XI-XII)",
+    "Rubrique": "RESULTAT NET (XI-XII)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "TOTAL DES PRODUITS (I + IV + VIII)",
+    "Sous_Categorie": "TOTAL DES PRODUITS (I + IV + VIII)",
+    "Rubrique": "TOTAL DES PRODUITS (I + IV + VIII)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "TOTAL DES CHARGES (II + V + IX +XII)",
+    "Sous_Categorie": "TOTAL DES CHARGES (II + V + IX +XII)",
+    "Rubrique": "TOTAL DES CHARGES (II + V + IX +XII)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  },
+   {
+    "Type_Tableau": "Bilan_CPC",
+    "Parent_Sous_Categorie": "RESULTAT NET (XIV -XV)",
+    "Sous_Categorie": "RESULTAT NET (XIV -XV)",
+    "Rubrique": "RESULTAT NET (XIV -XV)",
+    "Propres a l'exercice": "",
+    "Concernant les exercices_prec": "",
+    "Totaux de l'exercice": "",
+    "Exercice_prec": "",
+    "Commentaires": "_is_subtotal"
+  }
+]
