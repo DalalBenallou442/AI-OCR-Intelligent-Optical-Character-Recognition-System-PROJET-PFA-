@@ -1096,9 +1096,10 @@ def safe_json_extract(text):
 
 # ------------- wrapper utilisé par Flask ----------------
 def process_inputs(pdf_path, out_xlsx=None,
-                   tpl_act="templates/bilan_actif.json",
-                   tpl_pass="templates/bilan_passif.json",
-                   tpl_cpc="templates/bilan_cpc.json"):
+                  tpl_act="templates/bilan_actif.json",
+                  tpl_pass="templates/bilan_passif.json",
+                  tpl_cpc="templates/bilan_cpc.json",
+                  client_id=None): 
     ensure_templates_exist(tpl_act, tpl_pass, tpl_cpc)
 
     result = process_pdf_with_templates(

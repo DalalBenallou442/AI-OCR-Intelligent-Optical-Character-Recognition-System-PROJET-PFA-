@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Gestion des clients</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='bmci_logo.png') }}">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0f7e9 0%, #c8e6c9 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    }
+    .container-crud {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 6px 32px rgba(44, 62, 80, 0.10);
+      padding: 2.7rem 2.2rem 2.2rem 2.2rem;
+      margin-top: 4vh;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      border: 1px solid #b2dfdb;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.2rem;
+    }
+    .bmci-logo {
+      width: 60px;
+      height: auto;
+      margin-right: 1rem;
+      filter: drop-shadow(0 2px 8px rgba(44, 62, 80, 0.10));
+    }
+    .brand-title {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #218838;
+      letter-spacing: 1px;
+      margin-bottom: 0;
+    }
+    .brand-sub {
+      font-size: 1.1rem;
+      color: #388e3c;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+    .logout-btn {
+      margin-left: auto;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 0.7rem 1.3rem;
+      background: #e53935;
+      color: #fff !important;
+      border: none;
+      box-shadow: 0 2px 8px rgba(229,57,53,0.08);
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: #b71c1c;
+      color: #fff !important;
+    }
+    .search-bar {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      min-width: 240px;
+      font-size: 1.08rem;
+      background: #e8f5e9;
+      border-radius: 8px;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+      padding: 0.8rem 1rem;
+    }
+    .search-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .btn-success {
+      background: linear-gradient(90deg, #43a047 0%, #388e3c 100%);
+      border: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.8rem 1.3rem;
+      font-size: 1.08rem;
+      transition: background 0.2s;
+      min-width: 150px;
+    }
+    .btn-success:hover {
+      background: linear-gradient(90deg, #388e3c 0%, #43a047 100%);
+      color: #fff;
+    }
+    .btn-primary {
+      background: #007bff;
+      border: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.8rem 1.3rem;
+      font-size: 1.08rem;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #0056b3;
+      color: #fff;
+    }
+    .btn-outline-secondary {
+      font-weight: 500;
+      color: #218838;
+      border-radius: 10px;
+      border: 1px solid #a5d6a7;
+      background: #f1f8e9;
+      padding: 0.8rem 1.3rem;
+      font-size: 1.08rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline-secondary:hover {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+      font-size: 1.08rem;
+    }
+    .table th {
+      background: #d0ead7;
+      color: #218838;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .action-btns .btn-bilan,
+    .action-btns .btn-edit,
+    .action-btns .btn-delete {
+      min-width: 120px;
+      font-size: 1.08rem;
+      padding: 0.6rem 0.5rem;
+    }
+    .btn-bilan {
+      background: #e8f5e9;
+      color: #388e3c;
+      border: 1px solid #a5d6a7;
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-bilan:hover {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+    .btn-edit {
+      background: #43a047;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-edit:hover {
+      background: #388e3c;
+      color: #fff;
+    }
+    .btn-delete {
+      background: #e53935;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-delete:hover {
+      background: #b71c1c;
+      color: #fff;
+    }
+    .form-control {
+      font-size: 1.08rem;
+      padding: 0.6rem 1rem;
+    }
+    .btn-icon {
+      min-width: 48px;
+      min-height: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+    }
+    .fancy-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 0.3rem;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      color: #222;
+      background: linear-gradient(90deg, #222 60%, #218838 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 8px rgba(44,62,80,0.08), 0 1px 0 #218838;
+    }
+    .fancy-sub {
+      font-size: 1.2rem;
+      color: #218838;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    }
+    @media (max-width: 900px) {
+      .container-crud { padding: 1.2rem 0.5rem; }
+      .search-bar input { min-width: 120px; }
+      .search-actions { flex-direction: column; gap: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container-crud">
+  <div class="header-bar">
+    <div style="display:flex;align-items:center;">
+      <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="BMCI Logo" class="bmci-logo">
+      <div>
+        <h1 class="brand-title mb-0 fancy-title">Gestion des clients</h1>
+        <div class="brand-sub fancy-sub">BMCI BNP PARIBAS</div>
+      </div>
+    </div>
+    <a href="{{ url_for('admin.logout') }}" class="logout-btn" title="Déconnexion">
+      <i class="bi bi-box-arrow-right"></i>
+    </a>
+  </div>
+  <!-- Formulaire unique pour recherche et ajout -->
+  <form id="clientForm" action="{{ url_for('admin.clients_list') }}" method="get" class="search-bar">
+    <input type="text" name="id_client" class="form-control" placeholder="ID client" value="{{ id_query }}">
+    <input type="text" name="nom_client" class="form-control" placeholder="Nom client" value="{{ name_query }}">
+    <div class="search-actions">
+      <button type="submit" class="btn btn-primary" onclick="setFormMethod('get')">Rechercher</button>
+      <button type="submit" class="btn btn-primary" onclick="setFormMethod('post')">Ajouter</button>
+      <a href="{{ url_for('admin.clients_list') }}" class="btn btn-outline-secondary">Réinitialiser</a>
+    </div>
+  </form>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if clients %}
+        {% for c in clients %}
+        <tr>
+          <td>{{ c.ID_CLIENT or c.id_client }}</td>
+          <td>
+            {% if request.args.get('edit_id') == (c.ID_CLIENT or c.id_client)|string %}
+              <!-- Formulaire d'édition inline -->
+              <form method="post" action="{{ url_for('admin.client_edit', id_client=(c.ID_CLIENT or c.id_client)) }}" style="display:flex;gap:1rem;align-items:center;">
+                <input type="text" name="nom_client" value="{{ c.NOM_CLIENT or c.nom_client }}" class="form-control" required>
+                <button type="submit" class="btn btn-success btn-icon" title="Enregistrer">
+                  <i class="bi bi-check-lg"></i>
+                </button>
+                <a href="{{ url_for('admin.clients_list') }}" class="btn btn-secondary btn-icon" title="Annuler">
+                  <i class="bi bi-x-lg"></i>
+                </a>
+              </form>
+            {% else %}
+              {{ c.NOM_CLIENT or c.nom_client }}
+            {% endif %}
+          </td>
+          <td>
+            <div class="action-btns">
+              <a href="{{ url_for('admin.client_bilans', id_client=(c.ID_CLIENT or c.id_client)) }}" class="btn-bilan" title="Bilans">
+                <i class="bi bi-search"></i> BDD
+              </a>
+              <a href="{{ url_for('admin.clients_list', edit_id=(c.ID_CLIENT or c.id_client)) }}" class="btn-edit" title="Éditer">
+                <i class="bi bi-pencil-square"></i> Éditer
+              </a>
+              <form method="post" action="{{ url_for('admin.client_delete', id_client=(c.ID_CLIENT or c.id_client)) }}" style="display:inline" onsubmit="return confirm('Supprimer ce client et ses données ?');">
+                <button type="submit" class="btn-delete" title="Supprimer">
+                  <i class="bi bi-trash"></i> Supprimer
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr><td colspan="3">Aucun client trouvé.</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+<script>
+  function setFormMethod(method) {
+    var form = document.getElementById('clientForm');
+    form.method = method;
+    if(method === 'post') {
+      form.action = "{{ url_for('admin.client_add') }}";
+    } else {
+      form.action = "{{ url_for('admin.clients_list') }}";
+    }
+  }
+</script>
+</body>
+</html>

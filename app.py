@@ -1,5 +1,8 @@
 import mysql.connector
 
+
+
+
 def get_clients():
     """Récupère la liste des clients depuis la table CLIENTS"""
     try:
@@ -29,8 +32,15 @@ from PyPDF2 import PdfReader  # pour détecter si le PDF est scanné ou non
 from OCR import process_pdf
 from extract_with_gemini import process_inputs
 # --- Configuration Flask ---
+
+
 app = Flask(__name__, template_folder='templates')
-app.secret_key = "dev_secret_key_change_this"  # change en production
+app.secret_key = "dev_secret_key_change_this" 
+
+from admin_auth import admin_bp
+app.register_blueprint(admin_bp)
+print(">>> URL MAP:") 
+print(app.url_map)   # affiche toutes les routes et leurs endpoints
 
 # Dossiers pour stocker les uploads et les résultats
 UPLOAD_FOLDER = 'uploads'
@@ -94,16 +104,17 @@ def detect_scanned_pdf(filepath, min_alpha_chars=30):
 # --- Route principale : upload du fichier ---
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """
-    Affiche le formulaire d'upload.
-    Si POST et fichier valide -> sauvegarde le fichier et affiche le nom pour extraction.
-    """
+    clients = get_clients()
     filename = None
+    client_id = None
+    client_name = None
     is_scanned = False
-
     if request.method == 'POST':
         client_id = request.form.get('client_id')
-
+        for c in clients:
+            if str(c[0]) == str(client_id):
+                client_name = c[1]
+                break
         # Vérifie que le champ 'file' est présent
         if 'file' not in request.files:
             flash("Aucun fichier reçu (champ 'file' manquant).")
@@ -147,8 +158,7 @@ def index():
             flash(f"Fichier uploadé avec succès (PDF natif détecté) : {original_name}")
 
     # Rend la page d'accueil (template index.html) en envoyant le nom du fichier uploadé si présent
-    clients = get_clients()
-    return render_template('index.html', filename=filename, is_scanned=is_scanned, clients=clients)
+    return render_template('index.html', clients=clients, filename=filename, client_id=client_id, client_name=client_name, is_scanned=is_scanned)
 
 
 # --- Route d'extraction : appelle process_pdf et renvoie l'Excel ---
@@ -234,72 +244,42 @@ def delete_uploaded_file():
 # --- Route d'extraction : appelle process_pdf_gemini et renvoie l'Excel ---
 @app.route('/extract_excel_gemini', methods=['POST'])
 def extract_excel_gemini():
-    """
-    Extraction OCR Gemini : traite le PDF ou l'image uploadé(e) avec Gemini et renvoie l'Excel.
-    Accepts optional form field 'force_scanned' to force "scanned" processing.
-    """
     filename = request.form.get('filename')
-    if not filename:
-        flash("Aucun fichier sélectionné pour extraction.")
-        return redirect(url_for('index'))
+    client_id = request.form.get('client_id')
+    client_name = None
+    for c in get_clients():
+        if str(c[0]) == str(client_id):
+            client_name = c[1]
+            break
 
+    # --- NOM DU FICHIER EXCEL ---
+    if client_id and client_name:
+        excel_filename = f"{client_id}-{client_name}.xlsx".replace(" ", "_")
+    else:
+        excel_filename = "result.xlsx"
+    out_xlsx = os.path.join(RESULT_FOLDER, excel_filename)
+
+    # --- Chemin du PDF uploadé ---
     pdf_path = os.path.join(UPLOAD_FOLDER, filename)
     if not os.path.isfile(pdf_path):
-        flash("Fichier introuvable sur le serveur.")
+        flash("Fichier PDF introuvable.")
         return redirect(url_for('index'))
 
-    # --- Lecture du paramètre facultatif "forcer scanné" ---
-    force_val = request.form.get("force_scanned")
-    force = False
-    if force_val is not None:
-        # accepte "1", "on", "true", "yes"
-        if str(force_val).lower() in ("1", "on", "true", "yes"):
-            force = True
-
-    # Détection (sauf si forcée)
-    if not force:
-        is_scanned_local = detect_scanned_pdf(pdf_path)
-    else:
-        is_scanned_local = True
-        print("DEBUG: Forcé par l'utilisateur -> traitement comme PDF scanné")
-
-    # Si c'est une image unique upload (ex: image/png) converti en PDF
-    import mimetypes
-    mime, _ = mimetypes.guess_type(pdf_path)
-    if mime and mime.startswith("image/") and not pdf_path.lower().endswith(".pdf"):
-        from PIL import Image
-        img = Image.open(pdf_path)
-        pdf_converted = os.path.splitext(pdf_path)[0] + "_converted.pdf"
-        img.convert("RGB").save(pdf_converted, "PDF")
-        pdf_path = pdf_converted
-        is_scanned_local = True
-
-    out_xlsx = os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}_gemini.xlsx")
+    # --- Extraction Gemini ---
     try:
-        if is_scanned_local:
-            result_xlsx = process_inputs(pdf_path, out_xlsx=out_xlsx)
-        else:
-            result_xlsx = process_pdf(pdf_path, out_xlsx=out_xlsx)
-
-        # AJOUT DEBUG
-        print(f"DEBUG Flask: result_xlsx = {result_xlsx}")
-        print(f"DEBUG Flask: result_xlsx exists? {os.path.exists(result_xlsx) if result_xlsx else 'result_xlsx is None'}")
-
-        if not result_xlsx:
-            flash("Aucun résultat extrait par Gemini OCR.")
-            return redirect(url_for('index'))
+        result_xlsx = process_inputs(pdf_path, out_xlsx=out_xlsx, client_id=client_id)
     except Exception as e:
-        print(f"DEBUG Flask: Exception = {e}")  # AJOUT
-        flash(f"Erreur Gemini OCR : {e}")
+        print(f"Erreur durant l'extraction Gemini : {e}")
+        flash(f"Erreur durant l'extraction Gemini : {e}")
         return redirect(url_for('index'))
 
+    print(f"DEBUG: Chemin du fichier Excel généré: {result_xlsx}")
     if not os.path.isfile(result_xlsx):
-        print(f"DEBUG Flask: Le fichier {result_xlsx} n'existe pas")  # AJOUT
+        print("DEBUG: Fichier Excel non trouvé !")
         flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
         return redirect(url_for('index'))
 
-    print(f"DEBUG Flask: About to send file: {result_xlsx}")  # AJOUT
-    return send_file(result_xlsx, as_attachment=True)
+    return send_file(result_xlsx, as_attachment=True, download_name=excel_filename)
 
 
 

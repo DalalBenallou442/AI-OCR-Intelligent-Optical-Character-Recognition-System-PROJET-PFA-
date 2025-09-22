@@ -1,239 +1,480 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Extraction Bilan Actif/Passif</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BMCI - Extraction Bilan Actif/Passif</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='bmci_logo.png') }}">
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
-    /* Thèmes clair et sombre */
-    body.light-theme {
-      background: linear-gradient(135deg, #e8f5e9 0%, #b2dfdb 100%);
-      color: #000;
-    }
-    body.dark-theme {
-      background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
-      color: #fff;
+    :root{
+      --sidebar-w: 220px;
+      --sidebar-w-collapsed: 70px;
+      --sidebar-bg-light: #f8f9fa;
+      --accent: #006442;
     }
 
-    .card, .fancy-card {
-      transition: box-shadow 0.3s, transform 0.3s, background 0.3s, color 0.3s;
+    html,body { height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+    /* APP LAYOUT */
+    .app-shell { min-height:100vh; display:flex; background: linear-gradient(135deg, #e8f5e9 0%, #b2dfdb 100%); }
+
+    /* SIDEBAR - fixed with internal scroll */
+    nav.sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      height: 100vh;
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      max-width: var(--sidebar-w);
+      background: var(--sidebar-bg-light);
+      transition: width 0.22s ease, background 0.25s, left 0.22s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      z-index: 1100;
+      display:flex;
+      flex-direction:column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    body.light-theme .card, body.light-theme .fancy-card {
-      background: linear-gradient(90deg, #e0f7fa 0%, #f1f8e9 100%);
-      color: #000;
-    }
-    body.dark-theme .card, body.dark-theme .fancy-card {
-      background: linear-gradient(90deg, #1e1e1e 0%, #2c2c2c 100%);
-      color: #fff;
+    /* Collapsed: only icons visible */
+    nav.sidebar.collapsed {
+      width: var(--sidebar-w-collapsed);
+      min-width: var(--sidebar-w-collapsed);
+      max-width: var(--sidebar-w-collapsed);
     }
 
-    .fancy-btn {
-      transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
-      box-shadow: 0 2px 8px rgba(67,206,162,0.12);
+    /* BRAND */
+    .sidebar .brand {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:1.05rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      flex-shrink:0;
+      position: relative; /* important so toggle button can be absolute */
     }
-    body.light-theme .fancy-btn {
-      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-      color: #fff;
-    }
-    body.dark-theme .fancy-btn {
-      background: linear-gradient(90deg, #444 0%, #888 100%);
-      color: #fff;
-    }
-    .fancy-btn:hover, .fancy-btn:focus { transform: translateY(-2px) scale(1.04); }
+    .brand img { width:44px; height:auto; border-radius:6px; }
+    .brand .brand-label { font-weight:700; color:var(--accent); font-size:1rem; line-height:1; }
+    /* hide brand label when collapsed */
+    nav.sidebar.collapsed .brand .brand-label { display:none; }
 
-    .fade-in { opacity: 0; animation: fadeIn 1.2s ease-in-out forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
+    /* NAV LINKS */
+    .sidebar .nav { padding:0.6rem; margin-top:6px; display:flex; flex-direction:column; gap:6px; flex:1; }
+    .sidebar .nav .nav-item { position:relative; }
+    .sidebar .nav .nav-link {
+      display:flex; align-items:center; gap:12px;
+      padding:0.62rem 0.9rem;
+      border-radius:10px;
+      color:inherit; text-decoration:none;
+      transition: background .18s, transform .12s, box-shadow .12s;
+      cursor:pointer;
+      color: #263238;
+    }
+    .sidebar .nav .nav-link svg { width:20px; height:20px; flex-shrink:0; }
+    .sidebar .nav .nav-link:hover { background: rgba(0,0,0,0.04); transform: translateX(4px); }
+
+    .sidebar .nav .nav-link.active {
+      background: linear-gradient(90deg, rgba(67,206,162,0.12), rgba(24,90,157,0.06));
+      box-shadow: inset 0 0 0 1px rgba(0,100,66,0.06);
+      color: var(--accent);
+      font-weight:600;
+    }
+
+    /* when collapsed hide link text but keep spacing centered */
+    nav.sidebar.collapsed .nav .nav-link .link-text { display:none; }
+
+    /* tooltip when collapsed */
+    nav.sidebar.collapsed .nav .nav-item .nav-link::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%) translateX(-6px);
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s, transform .12s;
+      transform-origin: left center;
+      z-index:1200;
+    }
+    nav.sidebar.collapsed .nav .nav-item .nav-link:hover::after { opacity:1; transform: translateY(-50%) translateX(0); }
+
+    /* floating toggle button (always visible) */
+    #floatingToggle {
+      position: fixed;
+      top: 14px;
+      left: calc(var(--sidebar-w) + 14px);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1400;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: left .22s ease, transform .15s ease;
+    }
+    #floatingToggle:hover { transform: translateY(-3px); }
+    /* when collapsed we bring the floating button closer to the reduced sidebar */
+    body.sidebar-collapsed #floatingToggle { left: calc(var(--sidebar-w-collapsed) + 14px); }
+
+    /* bottom */
+    .sidebar .bottom { position: sticky; bottom: 0; background: inherit; padding: 0.8rem; border-top:1px solid rgba(0,0,0,0.04); flex-shrink:0; }
+
+    /* MAIN content - pushed aside by sidebar */
+    main.main { margin-left: var(--sidebar-w); transition: margin-left 0.22s ease; flex:1; width:100%; box-sizing:border-box; padding: 1.5rem 1.75rem; display:flex; justify-content:center; align-items:flex-start; }
+    nav.sidebar.collapsed + main.main { margin-left: var(--sidebar-w-collapsed); }
+
+    /* responsive: on small screens we still allow collapsing but not hiding */
+    @media (max-width: 767.98px) {
+      nav.sidebar { left: 0; width: var(--sidebar-w); position: fixed; }
+      nav.sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+      main.main { margin-left: var(--sidebar-w-collapsed); padding:1rem; }
+      /* adjust floating toggle on small screens */
+      #floatingToggle { left: calc(var(--sidebar-w-collapsed) + 12px); top: 10px; }
+    }
+
+    /* small helpers */
+    .mobile-hamburger { display:none; border:none; background:transparent; font-size:1.35rem; margin-right:0.5rem; }
+
+    /* nice header in main */
+    .app-header { text-align:center; margin-bottom:1rem; }
+    .app-header h1 { color: var(--accent); font-size:2.1rem; margin:0.2rem 0; }
+    .app-header p { margin:0; color:#4b4b4b; opacity:0.9; }
+
+    /* card tweaks */
+    .fancy-card { border-radius: 12px; }
+
   </style>
 </head>
 <body>
-<div class="container mt-5 shadow-lg rounded-4 p-4 fade-in" style="max-width: 900px; background: rgba(255,255,255,0.95);">
+  <div class="app-shell">
 
-  <!-- Toggle Thème -->
-  <div class="text-end mb-3">
-    <button id="theme-toggle" class="btn btn-sm btn-secondary">🌙 Sombre</button>
-  </div>
+    <!-- Floating toggle - always visible -->
+    <button id="floatingToggle" aria-label="Réduire/agrandir la navigation">☰</button>
 
-  <div class="text-center mb-4 pt-2">
-    <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="Logo BMCI" style="max-width: 120px;">
-    <h2 class="fw-bold" style="color: #006442;">BMCI - Extraction Bilan</h2>
-    <div style="color: #333; font-size: 1.1em; opacity:0.8;">Groupe BNP Paribas</div>
-  </div>
-
-  <!-- Formulaires d'upload -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-md-6">
-      <div class="card shadow-sm border-success rounded-3 h-100 fancy-card">
-        <div class="card-body text-center">
-          <h5 class="card-title text-success mb-3">PDF non scanné (natif)</h5>
-          <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="client_id_natif" class="form-label">Choisir un client :</label>
-              <select name="client_id" id="client_id_natif" class="form-select" required>
-                <option value="">-- Sélectionner --</option>
-                {% for client in clients %}
-                  <option value="{{ client[0] }}">{{ client[0] }} - {{ client[1] }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <input type="file" name="file" class="form-control mb-3" accept="application/pdf" required>
-            <button type="submit" class="btn w-100 fancy-btn">Extraire le PDF </button>
-          </form>
-        </div>
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="sidebar" aria-label="Navigation principale">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="BMCI Logo">
+        <div class="brand-label">BMCI BNP PARIBAS</div>
+        <!-- bouton hamburger à côté du logo SUPPRIMÉ -->
       </div>
-    </div>
-    <div class="col-12 col-md-6">
-      <div class="card shadow-sm border-primary rounded-3 h-100 fancy-card">
-        <div class="card-body text-center">
-          <h5 class="card-title text-primary mb-3">PDF scanné (image)</h5>
-          <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="client_id_scan" class="form-label">Choisir un client :</label>
-              <select name="client_id" id="client_id_scan" class="form-select" required>
-                <option value="">-- Sélectionner --</option>
-                {% for client in clients %}
-                  <option value="{{ client[0] }}">{{ client[0] }} - {{ client[1] }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <input type="file" name="file" class="form-control mb-3" accept="application/pdf,image/png,image/jpeg,image/jpg" required>
-            <button type="submit" class="btn w-100 fancy-btn btn-warning">Extraire le PDF</button>
-          </form>
+
+      <div class="nav" role="menu">
+        <div class="nav-item">
+          <a class="nav-link" href="#" data-page="ocr" data-tooltip="SYSTÈME OCR" role="menuitem">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="link-text">SYSTÈME OCR</span>
+          </a>
         </div>
+
+        <div class="nav-item">
+          <!-- Par celle-ci -->
+<a class="nav-link" href="{{ url_for('admin.login') }}" data-tooltip="ADMIN" role="menuitem">
+
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="link-text">ADMIN</span>
+          </a>
+        </div>
+
       </div>
-    </div>
+
+      <div class="bottom">
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary w-100" aria-pressed="false">🌙 Sombre</button>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main" role="main">
+      <div class="container mt-5 shadow-lg rounded-4 p-4 fade-in" style="max-width: 1000px; background: rgba(255,255,255,0.95);">
+
+        <div class="d-flex align-items-center mb-3">
+          <!-- hamburger in header removed; on garde seulement le floatingToggle -->
+          <div class="flex-grow-1 text-center app-header">
+            <img src="{{ url_for('static', filename='bmci_logo.png') }}" alt="Logo BMCI" style="max-width: 100px; display:block; margin: 0 auto;">
+            <h1 id="page-title">BMCI - SYSTÈME OCR</h1>
+            <p id="page-sub">Groupe BNP Paribas</p>
+          </div>
+        </div>
+
+        <!-- CONTENT PANES: OCR + ADMIN (dynamic switching) -->
+        <section id="ocr-section">
+          <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm border-success rounded-3 h-100 fancy-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-dark mb-3">PDF non scanné-Natif</h5>
+                  <form class="excel-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="client_id_natif" class="form-label fw-bold" style="color:var(--accent);">
+                        <span style="font-size:1.05em;">👤 Choisir un client :</span>
+                      </label>
+                      <select name="client_id" id="client_id_natif" class="form-select fancy-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for client in clients %}
+                          <option value="{{ client[0] }}">🧑‍💼 {{ client[0] }} - {{ client[1] }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <input type="file" name="file" class="form-control mb-3" accept="application/pdf" required>
+                    <button type="submit" class="btn w-100 fancy-btn btn-success">Extraire le PDF</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm border-primary rounded-3 h-100 fancy-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-dark mb-3">PDF scanné-Image</h5>
+                  <form class="excel-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="client_id_scan" class="form-label fw-bold" style="color:var(--accent);">
+                        <span style="font-size:1.05em;">👤 Choisir un client :</span>
+                      </label>
+                      <select name="client_id" id="client_id_scan" class="form-select fancy-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for client in clients %}
+                          <option value="{{ client[0] }}">🧑‍💼 {{ client[0] }} - {{ client[1] }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <input type="file" name="file" class="form-control mb-3" accept="application/pdf,image/png,image/jpeg,image/jpg" required>
+                    <button type="submit" class="btn w-100 fancy-btn btn-success">Extraire le PDF</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress bar + uploaded file card preserved -->
+          <div id="processing-bar" style="display:none; text-align:center; margin-bottom:20px;">
+            <div class="progress" style="height: 30px;">
+              <div id="progress-bar-inner" class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                   role="progressbar" style="width: 0%; font-size:1.05em;">Traitement en cours...</div>
+            </div>
+          </div>
+
+          {% if filename %}
+          <div id="uploaded-file-card" class="card mb-3 shadow-sm border-success rounded-3 fancy-card position-relative">
+            <div class="card-body text-center">
+              <h5 class="card-title text-success">Fichier uploadé
+                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2" id="remove-uploaded-file" title="Annuler le fichier">X</button>
+              </h5>
+              <p class="card-text">
+                <strong>Nom :</strong>
+                {% if client_id and client_name %}
+                  {{ client_id }}-{{ client_name }}.pdf
+                {% else %}
+                  {{ filename }}
+                {% endif %}
+              </p>
+
+              {% if is_scanned %}
+                <form class="excel-form" action="{{ url_for('extract_excel_gemini') }}" method="post">
+                  <input type="hidden" name="filename" value="{{ filename }}">
+                  <input type="hidden" name="client_id" value="{{ request.form.get('client_id') or client_id }}">
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="1" id="force_scanned" name="force_scanned">
+                    <label class="form-check-label" for="force_scanned">Forcer traitement comme PDF scanné</label>
+                  </div>
+                  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+                </form>
+              {% else %}
+                <form class="excel-form" action="{{ url_for('extract_excel') }}" method="post">
+                  <input type="hidden" name="filename" value="{{ filename }}">
+                  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+        </section>
+
+        <section id="admin-section" style="display:none;">
+          <div class="card p-4 shadow-sm rounded-3">
+            <h3>Administration</h3>
+            <p>Zone d'administration (ex: gestion clients, historique, paramètres).</p>
+            <div class="mb-3">
+              <a href="{{ url_for('manage_clients') if false else '#' }}" class="btn btn-outline-primary">Gérer les clients</a>
+              <a href="#" class="btn btn-outline-secondary ms-2">Paramètres</a>
+            </div>
+            <small class="text-muted">(Ici tu peux mettre les formulaires d'administration ou rediriger vers une route dédiée.)</small>
+          </div>
+        </section>
+
+      </div>
+    </main>
   </div>
 
-  <!-- Barre de progression -->
-  <div id="processing-bar" style="display:none; text-align:center; margin-bottom:20px;">
-    <div class="progress" style="height: 30px;">
-      <div id="progress-bar-inner" class="progress-bar progress-bar-striped progress-bar-animated bg-info"
-           role="progressbar" style="width: 0%; font-size:1.1em;">Traitement en cours...</div>
-    </div>
-  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Bloc fichier uploadé -->
-  {% if filename %}
-  <div id="uploaded-file-card" class="card mb-3 shadow-sm border-success rounded-3 fancy-card position-relative">
-    <div class="card-body text-center">
-      <h5 class="card-title text-success">Fichier uploadé
-        <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2" id="remove-uploaded-file" title="Annuler le fichier">X</button>
-      </h5>
-      <p class="card-text"><strong>Nom :</strong> {{ filename }}</p>
-      {% if is_scanned %}
-     <!-- dans le form d'extraction (uploaded file card) -->
-<form action="{{ url_for('extract_excel_gemini') }}" method="post">
-  <input type="hidden" name="filename" value="{{ filename }}">
-  <div class="form-check mb-2">
-    <input class="form-check-input" type="checkbox" value="1" id="force_scanned" name="force_scanned">
-    <label class="form-check-label" for="force_scanned">Forcer traitement comme PDF scanné</label>
-  </div>
-  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
-</form>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const sidebarToggleTop = document.getElementById('sidebarToggleTop'); // sera null (élément supprimé)
+    const mobileHamburger = document.getElementById('mobileHamburger');   // sera null (élément supprimé)
+    const mainEl = document.querySelector('main.main');
+    const floatingToggle = document.getElementById('floatingToggle');
 
-      {% else %}
-      <form action="{{ url_for('extract_excel') }}" method="post">
-        <input type="hidden" name="filename" value="{{ filename }}">
-        <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
-      </form>
-      {% endif %}
-    </div>
-  </div>
-  {% endif %}
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    const pageTitle = document.getElementById('page-title');
+    const ocrSection = document.getElementById('ocr-section');
+    const adminSection = document.getElementById('admin-section');
 
- 
+    function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || null; }
 
-</div>
+    // restore collapsed
+    const savedCollapsed = localStorage.getItem('bmci_sidebar_collapsed');
+    if(savedCollapsed === 'true') sidebar.classList.add('collapsed');
+    (function adjustMainMarginOnLoad(){ if(!mainEl) return; const collapsed = sidebar.classList.contains('collapsed'); mainEl.style.marginLeft = collapsed ? cssVar('--sidebar-w-collapsed') : cssVar('--sidebar-w'); })();
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+    // set first link active by default
+    function setActivePage(page){
+      navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === page));
+      if(page === 'admin'){
+        pageTitle.textContent = 'BMCI - ADMIN';
+        ocrSection.style.display = 'none';
+        adminSection.style.display = '';
+      } else {
+        pageTitle.textContent = 'BMCI - SYSTÈME OCR';
+        ocrSection.style.display = '';
+        adminSection.style.display = 'none';
+      }
+      // remember
+      localStorage.setItem('bmci_active_page', page);
+    }
 
-  // --- Thème clair/sombre ---
-  const toggleBtn = document.getElementById('theme-toggle');
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
-    document.body.classList.toggle('light-theme');
-    toggleBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️ Clair' : '🌙 Sombre';
+    const savedPage = localStorage.getItem('bmci_active_page') || 'ocr';
+    setActivePage(savedPage);
+
+    navLinks.forEach(link => {
+  link.addEventListener('click', function(e){
+    // Si l'élément a un data-page, on gère la navigation côté client (SPA-like)
+    const page = this.dataset.page;
+    if (page) {
+      e.preventDefault();
+      setActivePage(page);
+    }
+    // Sinon : on laisse le <a href="..."> faire la navigation normale vers le serveur
   });
-  document.body.classList.add('light-theme'); // thème clair par défaut
+});
+;
 
-  // --- Supprimer fichier uploadé ---
-  function removeUploadedFile() {
-    var uploadedCard = document.getElementById('uploaded-file-card');
-    if(uploadedCard) uploadedCard.remove();
-    var fileInput = document.querySelector('input[type="file"]');
-    if(fileInput) fileInput.value = '';
-  }
+    // utility to update toggle icon text/aria
+    function updateToggleIcon() {
+      const collapsed = sidebar.classList.contains('collapsed');
+      // use different char or SVG as you like
+      const icon = collapsed ? '☰' : '≡';
+      if(sidebarToggleTop) sidebarToggleTop.textContent = icon;
+      if(mobileHamburger) mobileHamburger.textContent = icon;
+      if(floatingToggle) floatingToggle.textContent = icon;
+      if(sidebarToggleTop) sidebarToggleTop.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
 
-  var removeBtn = document.getElementById('remove-uploaded-file');
-  if(removeBtn) {
-    removeBtn.addEventListener('click', function() {
-      removeUploadedFile();
-      fetch("{{ url_for('delete_uploaded_file') }}", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: "{{ filename }}" })
+    // helpers for body class and floating position
+    function applyBodyCollapsedClass(collapsed){ document.body.classList.toggle('sidebar-collapsed', !!collapsed); }
+    function updateFloatingPosition(){
+      const collapsed = sidebar.classList.contains('collapsed');
+      applyBodyCollapsedClass(collapsed);
+      if(mainEl){ mainEl.style.marginLeft = collapsed ? cssVar('--sidebar-w-collapsed') : cssVar('--sidebar-w'); }
+      updateToggleIcon();
+    }
+
+    // action of toggle (common)
+    function toggleSidebar(){
+      const collapsed = sidebar.classList.toggle('collapsed');
+      localStorage.setItem('bmci_sidebar_collapsed', collapsed ? 'true' : 'false');
+      updateFloatingPosition();
+    }
+
+    // floating toggle binds
+    if(floatingToggle){
+      floatingToggle.addEventListener('click', function(e){ e.preventDefault(); toggleSidebar(); });
+    }
+
+    // keep the brand button usable too (mais l'élément a été supprimé, condition empêche erreur)
+    if(sidebarToggleTop){
+      sidebarToggleTop.addEventListener('click', function(e){ e.preventDefault(); toggleSidebar(); });
+    }
+
+    // mobileHamburger: même comportement (élément supprimé, condition évite erreur)
+    if(mobileHamburger){
+      mobileHamburger.addEventListener('click', function(e){ e.preventDefault(); toggleSidebar(); });
+    }
+
+    // initialize UI
+    updateFloatingPosition();
+
+    // THEME
+    const savedTheme = localStorage.getItem('bmci_theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    function applyTheme(theme){ if(theme === 'dark'){ document.body.classList.add('dark-theme'); document.body.classList.remove('light-theme'); themeToggleBtn.textContent = '☀️ Clair'; themeToggleBtn.setAttribute('aria-pressed','true'); } else { document.body.classList.add('light-theme'); document.body.classList.remove('dark-theme'); themeToggleBtn.textContent = '🌙 Sombre'; themeToggleBtn.setAttribute('aria-pressed','false'); } }
+    if(savedTheme) applyTheme(savedTheme); else applyTheme(prefersDark ? 'dark' : 'light');
+    themeToggleBtn.addEventListener('click', function(){ const isDark = document.body.classList.toggle('dark-theme'); document.body.classList.toggle('light-theme', !isDark); localStorage.setItem('bmci_theme', isDark ? 'dark' : 'light'); themeToggleBtn.textContent = isDark ? '☀️ Clair' : '🌙 Sombre'; themeToggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false'); });
+
+    // file remove behaviour
+    function removeUploadedFile(){ const uploadedCard = document.getElementById('uploaded-file-card'); if(uploadedCard) uploadedCard.remove(); document.querySelectorAll('input[type="file"]').forEach(i=> i.value = ''); }
+    const removeBtn = document.getElementById('remove-uploaded-file');
+    if(removeBtn){ removeBtn.addEventListener('click', function(){ removeUploadedFile(); fetch("{{ url_for('delete_uploaded_file') }}", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename: "{{ filename }}" }) }).catch(()=>{/* ignore errors client-side */}); }); }
+
+    // forms with progress
+    document.querySelectorAll('form.excel-form').forEach(form => {
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const barContainer = document.getElementById('processing-bar');
+        const progressBar = document.getElementById('progress-bar-inner');
+        barContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressBar.textContent = 'Traitement en cours...';
+        progressBar.classList.remove('bg-danger');
+        progressBar.classList.add('bg-info');
+
+        const formData = new FormData(form);
+        let width = 0;
+        const interval = setInterval(()=>{ if(width >= 90) { clearInterval(interval); } else { width += Math.floor(Math.random()*10)+1; if(width>90) width = 90; progressBar.style.width = width + '%'; } }, 200);
+
+        fetch(form.action, { method: 'POST', body: formData })
+          .then(response => response.blob().then(blob => ({ blob: blob, headers: response.headers })))
+          .then(obj => {
+            const url = window.URL.createObjectURL(obj.blob);
+            const a = document.createElement('a'); a.href = url;
+            const disposition = obj.headers.get('Content-Disposition');
+            let filename = 'result.xlsx';
+            if(disposition && disposition.indexOf('filename=') !== -1){ filename = disposition.split('filename=')[1].replace(/"/g,'').trim(); }
+            a.download = filename; document.body.appendChild(a); a.click(); a.remove(); window.URL.revokeObjectURL(url);
+
+            progressBar.style.width = '100%'; progressBar.textContent = 'Téléchargement réussi !';
+            setTimeout(()=>{ barContainer.style.display = 'none'; removeUploadedFile(); }, 1200);
+          })
+          .catch(err => { clearInterval(interval); progressBar.classList.remove('bg-info'); progressBar.classList.add('bg-danger'); progressBar.textContent = 'Erreur pendant le traitement.'; console.error(err); });
       });
     });
-  }
 
-  // --- Conversion Excel avec barre de progression ---
-  document.querySelectorAll('form[action$="extract_excel"], form[action$="extract_excel_gemini"]').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      var barContainer = document.getElementById('processing-bar');
-      var progressBar = document.getElementById('progress-bar-inner');
-      barContainer.style.display = 'block';
-      progressBar.style.width = '0%';
-      progressBar.textContent = 'Traitement en cours...';
-      progressBar.classList.remove('bg-danger');
-      progressBar.classList.add('bg-info');
-
-      var formData = new FormData(form);
-
-      let width = 0;
-      let interval = setInterval(()=>{
-        if(width >= 90) clearInterval(interval);
-        else { width += Math.floor(Math.random()*10)+1; if(width>90) width=90; progressBar.style.width=width+'%'; }
-      },200);
-
-      fetch(form.action, { method: 'POST', body: formData })
-        .then(response => response.blob().then(blob => ({ blob: blob, headers: response.headers })))
-        .then(obj => {
-          var url = window.URL.createObjectURL(obj.blob);
-          var a = document.createElement('a');
-          a.href = url;
-          var disposition = obj.headers.get('Content-Disposition');
-          var filename = 'result.xlsx';
-          if(disposition && disposition.indexOf('filename=')!=-1){
-            filename = disposition.split('filename=')[1].replace(/"/g,'');
-          }
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-
-          progressBar.style.width='100%';
-          progressBar.textContent='Téléchargement avec succès !';
-          setTimeout(()=>{
-            barContainer.style.display='none';
-            removeUploadedFile();
-          },2000);
-        })
-        .catch(err => {
-          clearInterval(interval);
-          progressBar.classList.remove('bg-info');
-          progressBar.classList.add('bg-danger');
-          progressBar.textContent='Erreur pendant le traitement.';
-          console.error(err);
-        });
+    // keep main margin in sync on resize
+    window.addEventListener('resize', () => {
+      if(mainEl){ mainEl.style.marginLeft = sidebar.classList.contains('collapsed') ? cssVar('--sidebar-w-collapsed') : cssVar('--sidebar-w'); }
+      updateFloatingPosition();
     });
-  });
 
-});
-</script>
+  });
+  </script>
 </body>
 </html>
