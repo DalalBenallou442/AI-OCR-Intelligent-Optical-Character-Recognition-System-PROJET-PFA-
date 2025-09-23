@@ -178,16 +178,21 @@ def extract_excel():
         flash("Fichier introuvable sur le serveur.")
         return redirect(url_for('index'))
 
+    out_xlsx = os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}.xlsx")
     try:
-        out_path = process_pdf(
-            pdf_path,
-            out=os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}.xlsx")
-        )
+        res = process_pdf(pdf_path, out=out_xlsx)
     except Exception as e:
+        app.logger.exception("Erreur durant process_pdf: %s", e)
         flash(f"Erreur durant le traitement : {e}")
         return redirect(url_for('index'))
 
-    return send_from_directory(RESULT_FOLDER, os.path.basename(out_path), as_attachment=True)
+    # si la fonction a renvoyé un chemin, on l'utilise ; sinon on vérifie out_xlsx
+    result_path = res if isinstance(res, str) and os.path.isfile(res) else (out_xlsx if os.path.isfile(out_xlsx) else None)
+    if not result_path:
+        flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
+        return redirect(url_for('index'))
+
+    return send_file(result_path, as_attachment=True)
 
 
 # --- Route pour extraire le texte d'un PDF natif uniquement ---

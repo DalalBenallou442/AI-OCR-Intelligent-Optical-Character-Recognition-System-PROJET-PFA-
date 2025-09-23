@@ -158,6 +158,11 @@
 
     /* card tweaks */
     .fancy-card { border-radius: 12px; }
+    .fancy-btn.btn-warning {
+  background-color: #004c33 !important;
+  border-color: #004c33 !important;
+  color: #fffcfc !important;
+}
 
   </style>
 </head>
@@ -219,7 +224,7 @@
               <div class="card shadow-sm border-success rounded-3 h-100 fancy-card">
                 <div class="card-body text-center">
                   <h5 class="card-title text-dark mb-3">PDF non scanné-Natif</h5>
-                  <form class="excel-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+                  <form class="upload-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                       <label for="client_id_natif" class="form-label fw-bold" style="color:var(--accent);">
                         <span style="font-size:1.05em;">👤 Choisir un client :</span>
@@ -242,7 +247,7 @@
               <div class="card shadow-sm border-primary rounded-3 h-100 fancy-card">
                 <div class="card-body text-center">
                   <h5 class="card-title text-dark mb-3">PDF scanné-Image</h5>
-                  <form class="excel-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+                  <form class="upload-form" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                       <label for="client_id_scan" class="form-label fw-bold" style="color:var(--accent);">
                         <span style="font-size:1.05em;">👤 Choisir un client :</span>
@@ -293,12 +298,16 @@
                     <input class="form-check-input" type="checkbox" value="1" id="force_scanned" name="force_scanned">
                     <label class="form-check-label" for="force_scanned">Forcer traitement comme PDF scanné</label>
                   </div>
-                  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+                  <button type="submit" class="btn w-100 fancy-btn btn-warning">Convertir le PDF en Excel</button>
+
                 </form>
               {% else %}
                 <form class="excel-form" action="{{ url_for('extract_excel') }}" method="post">
                   <input type="hidden" name="filename" value="{{ filename }}">
-                  <button type="submit" class="btn w-100 fancy-btn">Convertir le PDF en Excel</button>
+                  <button type="submit" class="btn w-100 fancy-btn btn-warning">Convertir le PDF en Excel</button>
+
+
+
                 </form>
               {% endif %}
             </div>
@@ -435,8 +444,8 @@
     const removeBtn = document.getElementById('remove-uploaded-file');
     if(removeBtn){ removeBtn.addEventListener('click', function(){ removeUploadedFile(); fetch("{{ url_for('delete_uploaded_file') }}", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename: "{{ filename }}" }) }).catch(()=>{/* ignore errors client-side */}); }); }
 
-    // forms with progress
-    document.querySelectorAll('form.excel-form').forEach(form => {
+    // forms with progress - only target extraction endpoints
+    document.querySelectorAll('form[action$="/extract_excel"], form[action$="/extract_excel_gemini"]').forEach(form => {
       form.addEventListener('submit', function(e){
         e.preventDefault();
         const barContainer = document.getElementById('processing-bar');
@@ -449,7 +458,10 @@
 
         const formData = new FormData(form);
         let width = 0;
-        const interval = setInterval(()=>{ if(width >= 90) { clearInterval(interval); } else { width += Math.floor(Math.random()*10)+1; if(width>90) width = 90; progressBar.style.width = width + '%'; } }, 200);
+        const interval = setInterval(()=>{ 
+          if(width >= 90) { clearInterval(interval); } 
+          else { width += Math.floor(Math.random()*10)+1; if(width>90) width = 90; progressBar.style.width = width + '%'; } 
+        }, 200);
 
         fetch(form.action, { method: 'POST', body: formData })
           .then(response => response.blob().then(blob => ({ blob: blob, headers: response.headers })))
@@ -462,7 +474,7 @@
             a.download = filename; document.body.appendChild(a); a.click(); a.remove(); window.URL.revokeObjectURL(url);
 
             progressBar.style.width = '100%'; progressBar.textContent = 'Téléchargement réussi !';
-            setTimeout(()=>{ barContainer.style.display = 'none'; removeUploadedFile(); }, 1200);
+            setTimeout(()=>{ barContainer.style.display = 'none'; document.querySelectorAll('input[type="file"]').forEach(i=> i.value = ''); }, 1200);
           })
           .catch(err => { clearInterval(interval); progressBar.classList.remove('bg-info'); progressBar.classList.add('bg-danger'); progressBar.textContent = 'Erreur pendant le traitement.'; console.error(err); });
       });
