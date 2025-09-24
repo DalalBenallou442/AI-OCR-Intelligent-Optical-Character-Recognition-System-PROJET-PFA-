@@ -164,9 +164,86 @@
   color: #fffcfc !important;
 }
 
+/* Thème sombre */
+body.dark-theme {
+  background: #222 !important;
+  color: #f8f8f8 !important;
+}
+body.dark-theme .container,
+body.dark-theme .card,
+body.dark-theme .fancy-card {
+  background: #2c2c2c !important;
+  color: #f8f8f8 !important;
+  border-color: #444 !important;
+}
+body.dark-theme nav.sidebar {
+  background: #232323 !important;
+  color: #f8f8f8 !important;
+}
+body.dark-theme .sidebar .nav-link {
+  color: #f8f8f8 !important;
+}
+body.dark-theme .sidebar .nav-link.active {
+  background: #333 !important;
+  color: #67e6a2 !important;
+}
+body.dark-theme .btn,
+body.dark-theme .btn-warning,
+body.dark-theme .btn-success,
+body.dark-theme .btn-outline-danger {
+  background: #444 !important;
+  color: #f8f8f8 !important;
+  border-color: #666 !important;
+}
+body.dark-theme .alert {
+  background: #333 !important;
+  color: #f8f8f8 !important;
+  border-color: #444 !important;
+}
+
+/* Améliore la visibilité des titres et textes en mode sombre */
+body.dark-theme .card-title,
+body.dark-theme .card-body,
+body.dark-theme .form-label,
+body.dark-theme .app-header h1,
+body.dark-theme .app-header p {
+  color: #67e6a2 !important; /* Vert accent ou choisis une couleur claire */
+}
+
+body.dark-theme .card-title.text-dark,
+body.dark-theme .text-dark {
+  color: #f8f8f8 !important;
+}
+
+/* Thème clair (optionnel, pour forcer le retour) */
+body.light-theme {
+  background: #fff !important;
+  color: #222 !important;
+}
   </style>
 </head>
 <body>
+   {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="d-flex flex-column align-items-center mt-3">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} shadow rounded-3 px-4 py-2 mb-2 d-flex align-items-center" role="alert" style="max-width: 500px;">
+          {% if category == 'success' %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="green" class="me-2" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM7 10.414l4.707-4.707-1.414-1.414L7 7.586 5.707 6.293 4.293 7.707 7 10.414z"/>
+            </svg>
+          {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="red" class="me-2" viewBox="0 0 16 16">
+              <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.293 9.293-1.414 1.414L8 9.414l-1.879 1.879-1.414-1.414L6.586 8 4.707 6.121l1.414-1.414L8 6.586l1.879-1.879 1.414 1.414L9.414 8l1.879 1.879z"/>
+            </svg>
+          {% endif %}
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+  
   <div class="app-shell">
 
     <!-- Floating toggle - always visible -->
@@ -191,10 +268,13 @@
         <div class="nav-item">
           <!-- Par celle-ci -->
 <a class="nav-link" href="{{ url_for('admin.login') }}" data-tooltip="ADMIN" role="menuitem">
-
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="link-text">ADMIN</span>
-          </a>
+    <!-- Icône bonhomme user -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+      <path d="M2 14s-1 0-1-1 1-4 7-4 7 3 7 4-1 1-1 1H2z"/>
+    </svg>
+    <span class="link-text">ADMINISTRATEUR</span>
+  </a>
         </div>
 
       </div>
@@ -271,7 +351,7 @@
           <div id="processing-bar" style="display:none; text-align:center; margin-bottom:20px;">
             <div class="progress" style="height: 30px;">
               <div id="progress-bar-inner" class="progress-bar progress-bar-striped progress-bar-animated bg-info"
-                   role="progressbar" style="width: 0%; font-size:1.05em;">Traitement en cours...</div>
+                   role="progressbar" style="width: 0%; font-size:1.05em;">0%</div>
             </div>
           </div>
 
@@ -304,15 +384,40 @@
               {% else %}
                 <form class="excel-form" action="{{ url_for('extract_excel') }}" method="post">
                   <input type="hidden" name="filename" value="{{ filename }}">
+                  <input type="hidden" name="client_id" value="{{ request.form.get('client_id') or client_id }}">
                   <button type="submit" class="btn w-100 fancy-btn btn-warning">Convertir le PDF en Excel</button>
-
-
-
                 </form>
               {% endif %}
             </div>
           </div>
           {% endif %}
+
+          {% if excel_ready %}
+  <div class="alert alert-success text-center mb-4">
+    <strong>Fichier Excel prêt :</strong> {{ excel_filename }}
+  </div>
+  <div class="d-flex justify-content-center gap-3 mb-5">
+    <form action="{{ url_for('download_excel') }}" method="post">
+      <input type="hidden" name="filename" value="{{ excel_filename }}">
+      <button type="submit" class="btn btn-warning btn-lg d-flex align-items-center gap-2 shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.6A1.5 1.5 0 0 0 2.5 14.5h11a1.5 1.5 0 0 0 1.5-1.5v-2.6a.5.5 0 0 1 1 0v2.6A2.5 2.5 0 0 1 13.5 15.5h-11A2.5 2.5 0 0 1 0 13.5v-2.6a.5.5 0 0 1 .5-.5z"/>
+          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+        </svg>
+        Télécharger Excel
+      </button>
+    </form>
+    <form action="{{ url_for('save_excel_to_db') }}" method="post">
+      <input type="hidden" name="filename" value="{{ excel_filename }}">
+      <button type="submit" class="btn btn-success btn-lg d-flex align-items-center gap-2 shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-database-check" viewBox="0 0 16 16">
+          <path d="M8 0C3.58 0 0 1.79 0 4v8c0 2.21 3.58 4 8 4s8-1.79 8-4V4c0-2.21-3.58-4-8-4zm0 1c4.07 0 7 1.64 7 3s-2.93 3-7 3-7-1.64-7-3 2.93-3 7-3zm7 7c0 1.36-2.93 3-7 3s-7-1.64-7-3V6.08C2.09 7.13 4.81 8 8 8s5.91-.87 7-1.92V8zm0 2c0 1.36-2.93 3-7 3s-7-1.64-7-3v-1.08C2.09 10.13 4.81 11 8 11s5.91-.87 7-1.92V10zm-2.146 1.854a.5.5 0 0 1-.708 0l-1.646-1.647a.5.5 0 1 1 .708-.708l1.146 1.147 2.146-2.147a.5.5 0 1 1 .708.708l-2.5 2.5z"/>
+        </svg>
+        Sauvegarder dans la BDD
+      </button>
+    </form>
+  </div>
+{% endif %}
         </section>
 
         <section id="admin-section" style="display:none;">
@@ -445,38 +550,45 @@
     if(removeBtn){ removeBtn.addEventListener('click', function(){ removeUploadedFile(); fetch("{{ url_for('delete_uploaded_file') }}", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename: "{{ filename }}" }) }).catch(()=>{/* ignore errors client-side */}); }); }
 
     // forms with progress - only target extraction endpoints
-    document.querySelectorAll('form[action$="/extract_excel"], form[action$="/extract_excel_gemini"]').forEach(form => {
+    document.querySelectorAll('form.excel-form').forEach(form => {
       form.addEventListener('submit', function(e){
         e.preventDefault();
         const barContainer = document.getElementById('processing-bar');
         const progressBar = document.getElementById('progress-bar-inner');
         barContainer.style.display = 'block';
-        progressBar.style.width = '0%';
-        progressBar.textContent = 'Traitement en cours...';
-        progressBar.classList.remove('bg-danger');
-        progressBar.classList.add('bg-info');
-
-        const formData = new FormData(form);
         let width = 0;
-        const interval = setInterval(()=>{ 
-          if(width >= 90) { clearInterval(interval); } 
-          else { width += Math.floor(Math.random()*10)+1; if(width>90) width = 90; progressBar.style.width = width + '%'; } 
-        }, 200);
+        progressBar.style.width = '0%';
+        progressBar.textContent = '0%';
 
+        // Animation du pourcentage (simulée, car le backend ne renvoie pas le vrai état)
+        const interval = setInterval(() => {
+          if(width >= 90) {
+            clearInterval(interval);
+          } else {
+            width += Math.floor(Math.random()*10)+1;
+            if(width > 90) width = 90;
+            progressBar.style.width = width + '%';
+            progressBar.textContent = width + '%';
+          }
+        }, 300);
+
+        // Envoi du formulaire en AJAX
+        const formData = new FormData(form);
         fetch(form.action, { method: 'POST', body: formData })
-          .then(response => response.blob().then(blob => ({ blob: blob, headers: response.headers })))
-          .then(obj => {
-            const url = window.URL.createObjectURL(obj.blob);
-            const a = document.createElement('a'); a.href = url;
-            const disposition = obj.headers.get('Content-Disposition');
-            let filename = 'result.xlsx';
-            if(disposition && disposition.indexOf('filename=') !== -1){ filename = disposition.split('filename=')[1].replace(/"/g,'').trim(); }
-            a.download = filename; document.body.appendChild(a); a.click(); a.remove(); window.URL.revokeObjectURL(url);
-
-            progressBar.style.width = '100%'; progressBar.textContent = 'Téléchargement réussi !';
-            setTimeout(()=>{ barContainer.style.display = 'none'; document.querySelectorAll('input[type="file"]').forEach(i=> i.value = ''); }, 1200);
+          .then(response => response.text())
+          .then(html => {
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+            progressBar.textContent = '100%';
+            setTimeout(() => { barContainer.style.display = 'none'; }, 1200);
+            document.body.innerHTML = html; // Recharge la page avec le résultat
           })
-          .catch(err => { clearInterval(interval); progressBar.classList.remove('bg-info'); progressBar.classList.add('bg-danger'); progressBar.textContent = 'Erreur pendant le traitement.'; console.error(err); });
+          .catch(err => {
+            clearInterval(interval);
+            progressBar.classList.remove('bg-info');
+            progressBar.classList.add('bg-danger');
+            progressBar.textContent = 'Erreur pendant le traitement.';
+          });
       });
     });
 
@@ -486,6 +598,14 @@
       updateFloatingPosition();
     });
 
+    // Auto-hide flash messages after 3 seconds
+    setTimeout(function() {
+      document.querySelectorAll('.alert[role="alert"]').forEach(function(alert) {
+        alert.style.transition = "opacity 0.6s";
+        alert.style.opacity = "0";
+        setTimeout(function() { alert.remove(); }, 600);
+      });
+    }, 3000);
   });
   </script>
 </body>

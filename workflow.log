@@ -1,0 +1,54 @@
+2025-09-23 14:29:15,096 [INFO] Traitement du fichier: 105-LIASSE_FISCALE_DGI.xlsx
+2025-09-23 14:29:15,435 [INFO] Feuille Actif détectée comme actif.
+2025-09-23 14:29:15,498 [ERROR] ERREUR durant insertion: 1054 (42S22): Unknown column 'nan' in 'field list'
+Traceback (most recent call last):
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\.venv\Lib\site-packages\mysql\connector\connection_cext.py", line 772, in cmd_query
+    self._cmysql.query(
+    ~~~~~~~~~~~~~~~~~~^
+        query,
+        ^^^^^^
+    ...<3 lines>...
+        query_attrs=self.query_attrs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+_mysql_connector.MySQLInterfaceError: Unknown column 'nan' in 'field list'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\workflow.py", line 266, in process_single_file
+    cnt = insert_rows_into_db(conn, "bilan_actif", rows_to_insert)
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\workflow.py", line 161, in insert_rows_into_db
+    cur.execute(q, vals)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\.venv\Lib\site-packages\mysql\connector\cursor_cext.py", line 353, in execute
+    self._connection.cmd_query(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._stmt_partition["mappable_stmt"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        raw_as_string=self._raw_as_string,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\.venv\Lib\site-packages\mysql\connector\opentelemetry\context_propagation.py", line 97, in wrapper
+    return method(cnx, *args, **kwargs)
+  File "C:\Users\hp\OneDrive\Bureau\OCR System\.venv\Lib\site-packages\mysql\connector\connection_cext.py", line 781, in cmd_query
+    raise get_mysql_exception(
+        err.errno, msg=err.msg, sqlstate=err.sqlstate
+    ) from err
+mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'nan' in 'field list'
+
+2025-09-23 14:29:15,501 [ERROR] Échec traitement 105-LIASSE_FISCALE_DGI.xlsx : insert_err:1054 (42S22): Unknown column 'nan' in 'field list'
+2025-09-23 14:29:15,506 [ERROR] Impossible de déplacer result/105-LIASSE_FISCALE_DGI.xlsx -> error\105-LIASSE_FISCALE_DGI.xlsx: [WinError 32] Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus: 'result/105-LIASSE_FISCALE_DGI.xlsx'
+2025-09-23 14:33:18,390 [INFO] Traitement du fichier: 105-LIASSE_FISCALE_DGI.xlsx
+2025-09-23 14:33:18,730 [INFO] Feuille Actif détectée comme actif.
+2025-09-23 14:33:18,806 [INFO] Lignes Actif insérées depuis feuille 'Actif': 123
+2025-09-23 14:33:18,813 [INFO] Feuille Passif détectée comme actif.
+2025-09-23 14:33:18,825 [INFO] Lignes Actif insérées depuis feuille 'Passif': 29
+2025-09-23 14:33:18,838 [INFO] Vérif bilan_actif : 152 lignes avec source='105-LIASSE_FISCALE_DGI.xlsx'
+2025-09-23 14:33:18,847 [INFO] Vérif bilan_passif : 0 lignes avec source='105-LIASSE_FISCALE_DGI.xlsx'
+2025-09-23 14:33:18,853 [INFO] Vérif cpc : 0 lignes avec source='105-LIASSE_FISCALE_DGI.xlsx'
+2025-09-23 14:33:18,854 [INFO] ✅ Fini — fichier : result/105-LIASSE_FISCALE_DGI.xlsx
+2025-09-23 14:33:18,857 [INFO] Fichier déplacé vers proceed\105-LIASSE_FISCALE_DGI.xlsx

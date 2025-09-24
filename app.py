@@ -1,5 +1,7 @@
 import mysql.connector
-
+from workflow import process_single_file
+import shutil
+import os
 
 
 
@@ -153,9 +155,9 @@ def index():
         is_scanned = detect_scanned_pdf(save_path)
 
         if is_scanned:
-            flash(f"Fichier uploadé avec succès (PDF scanné détecté) : {original_name}")
+            flash(f"Fichier uploadé avec succès (PDF scanné détecté) : {original_name}", "success")
         else:
-            flash(f"Fichier uploadé avec succès (PDF natif détecté) : {original_name}")
+            flash(f"Fichier uploadé avec succès (PDF natif détecté) : {original_name}", "success")
 
     # Rend la page d'accueil (template index.html) en envoyant le nom du fichier uploadé si présent
     return render_template('index.html', clients=clients, filename=filename, client_id=client_id, client_name=client_name, is_scanned=is_scanned)
@@ -164,11 +166,14 @@ def index():
 # --- Route d'extraction : appelle process_pdf et renvoie l'Excel ---
 @app.route('/extract_excel', methods=['POST'])
 def extract_excel():
-    """
-    Récupère le nom du fichier (hidden input from index.html),
-    appelle process_pdf(pdf_path) et renvoie le fichier Excel généré.
-    """
     filename = request.form.get('filename')
+    client_id = request.form.get('client_id')
+    client_name = None
+    for c in get_clients():
+        if str(c[0]) == str(client_id):
+            client_name = c[1]
+            break
+
     if not filename:
         flash("Aucun fichier sélectionné pour extraction.")
         return redirect(url_for('index'))
@@ -178,7 +183,13 @@ def extract_excel():
         flash("Fichier introuvable sur le serveur.")
         return redirect(url_for('index'))
 
-    out_xlsx = os.path.join(RESULT_FOLDER, f"{os.path.splitext(filename)[0]}.xlsx")
+    # --- NOM DU FICHIER EXCEL ---
+    if client_id and client_name:
+        excel_filename = f"{client_id}-{client_name}.xlsx".replace(" ", "_")
+    else:
+        excel_filename = f"{os.path.splitext(filename)[0]}.xlsx"
+    out_xlsx = os.path.join(RESULT_FOLDER, excel_filename)
+
     try:
         res = process_pdf(pdf_path, out=out_xlsx)
     except Exception as e:
@@ -186,13 +197,22 @@ def extract_excel():
         flash(f"Erreur durant le traitement : {e}")
         return redirect(url_for('index'))
 
-    # si la fonction a renvoyé un chemin, on l'utilise ; sinon on vérifie out_xlsx
     result_path = res if isinstance(res, str) and os.path.isfile(res) else (out_xlsx if os.path.isfile(out_xlsx) else None)
     if not result_path:
         flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
         return redirect(url_for('index'))
 
-    return send_file(result_path, as_attachment=True)
+    # Affiche la page avec les deux boutons
+    return render_template(
+        'index.html',
+        clients=get_clients(),
+        excel_ready=True,
+        excel_filename=os.path.basename(out_xlsx),
+        filename=filename,
+        client_id=client_id,
+        client_name=client_name,
+        is_scanned=False
+    )
 
 
 # --- Route pour extraire le texte d'un PDF natif uniquement ---
@@ -284,9 +304,48 @@ def extract_excel_gemini():
         flash("Le fichier Excel n'a pas été généré. Vérifiez le traitement.")
         return redirect(url_for('index'))
 
-    return send_file(result_xlsx, as_attachment=True, download_name=excel_filename)
+    # --- Affiche la page avec les deux boutons ---
+    return render_template(
+        "index.html",
+        clients=get_clients(),
+        excel_ready=True,
+        excel_filename=excel_filename,
+        filename=filename,
+        client_id=client_id,
+        client_name=client_name,
+        is_scanned=True
+    )
 
 
+@app.route('/download_excel', methods=['POST'])
+def download_excel():
+    filename = request.form.get('filename')
+    path = os.path.join(RESULT_FOLDER, filename)
+    return send_file(path, as_attachment=True)
+
+@app.route('/save_excel_to_db', methods=['POST'])
+def save_excel_to_db():
+    filename = request.form.get('filename')
+    excel_path = os.path.join(RESULT_FOLDER, filename)
+    proceed_path = os.path.join("proceed", filename)
+    try:
+        process_single_file(excel_path)
+        shutil.copy2(excel_path, proceed_path)
+        # Essaye de supprimer plusieurs fois si le fichier est verrouillé
+        deleted = False
+        for _ in range(3):
+            try:
+                os.remove(excel_path)
+                deleted = True
+                break
+            except PermissionError:
+                import time
+                time.sleep(1)
+        else:
+            flash("Fichier sauvegardé dans la BDD et déplacé vers proceed !", "success")
+    except Exception as e:
+        flash(f"Erreur lors de la sauvegarde : {e}", "danger")
+    return redirect(url_for('index'))
 
 
 # --- Lancement ---
@@ -299,4 +358,4 @@ if __name__ == "__main__":
     else:
         print("Connexion échouée ou aucun client trouvé.")
     # Tu peux ensuite lancer Flask normalement
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5003)
