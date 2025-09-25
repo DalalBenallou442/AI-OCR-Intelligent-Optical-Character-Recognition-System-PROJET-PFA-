@@ -41,8 +41,6 @@ app.secret_key = "dev_secret_key_change_this"
 
 from admin_auth import admin_bp
 app.register_blueprint(admin_bp)
-print(">>> URL MAP:") 
-print(app.url_map)   # affiche toutes les routes et leurs endpoints
 
 # Dossiers pour stocker les uploads et les résultats
 UPLOAD_FOLDER = 'uploads'

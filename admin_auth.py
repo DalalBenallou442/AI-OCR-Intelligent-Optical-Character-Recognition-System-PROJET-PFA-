@@ -1,9 +1,9 @@
 # admin_auth.py
-from flask import Blueprint, request, render_template, redirect, url_for, flash, session
+from flask import Blueprint, request, render_template, redirect, url_for, flash, session, jsonify, current_app
 import mysql.connector
 from werkzeug.security import check_password_hash, generate_password_hash
 
-admin_bp = Blueprint('admin', __name__, template_folder='templates')
+admin_bp = Blueprint('admin', __name__, template_folder='templates', url_prefix='/admin')
 
 # --- CONFIG DB (adapte si nécessaire) ---
 DB_CONFIG = {
@@ -17,7 +17,7 @@ def get_db_conn():
     return mysql.connector.connect(**DB_CONFIG)
 
 # ROUTE: Login (email + mot de passe)
-@admin_bp.route('/admin/login', methods=['GET', 'POST'])
+@admin_bp.route('/login', methods=['GET', 'POST'])
 def login():
     # si déjà connecté -> redirige vers dashboard
     if session.get('admin_authenticated'):
@@ -87,7 +87,7 @@ def login():
 
 
 # ROUTE: Admin Dashboard (protégée)
-@admin_bp.route('/admin')
+@admin_bp.route('/')
 def admin_dashboard():
     if not session.get('admin_authenticated'):
         return redirect(url_for('admin.login'))
@@ -95,7 +95,7 @@ def admin_dashboard():
 
 
 # ROUTE: Logout
-@admin_bp.route('/admin/logout')
+@admin_bp.route('/logout')
 def logout():
     session.pop('admin_authenticated', None)
     session.pop('admin_id', None)
@@ -104,7 +104,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@admin_bp.route('/admin/clients', methods=['GET', 'POST'])
+@admin_bp.route('/clients', methods=['GET', 'POST'])
 def clients_list():
     if request.method == 'POST':
         id_client = request.args.get('edit_id')
@@ -152,7 +152,7 @@ def clients_list():
             conn.close()
     return render_template('clients_list_search.html', clients=rows, id_query=id_q, name_query=name_q)
 
-@admin_bp.route('/admin/clients/add', methods=['POST'])
+@admin_bp.route('/clients/add', methods=['POST'])
 def client_add():
     id_client = (request.form.get('id_client') or '').strip()
     nom_client = (request.form.get('nom_client') or '').strip()
@@ -173,36 +173,83 @@ def client_add():
         except: pass
     return redirect(url_for('admin.clients_list'))
 
-@admin_bp.route('/admin/clients/<id_client>/bilans', methods=['GET'])
+@admin_bp.route('/clients/<int:id_client>/bilans')
 def client_bilans(id_client):
+    page_actif = int(request.args.get('page_actif', 1))
+    page_passif = int(request.args.get('page_passif', 1))
+    page_cpc = int(request.args.get('page_cpc', 1))
+    per_page = 10
+
+    offset_actif = (page_actif - 1) * per_page
+    offset_passif = (page_passif - 1) * per_page
+    offset_cpc = (page_cpc - 1) * per_page
+
+    conn = None
+    cursor = None
     try:
         conn = get_db_conn()
-        cur = conn.cursor(dictionary=True)
-        cur.execute("SELECT ID_CLIENT, NOM_CLIENT FROM CLIENT WHERE ID_CLIENT=%s", (id_client,))
-        client = cur.fetchone()
-        if not client:
-            cur.close()
-            flash("Client introuvable.", "warning")
-            return redirect(url_for('admin.clients_list'))
+        cursor = conn.cursor(dictionary=True)
 
-        # récupère les bilans (lecture seule)
-        cur.execute("SELECT * FROM bilan_actif WHERE id_client=%s ORDER BY matched_from_page, rubrique", (id_client,))
-        actif = cur.fetchall()
-        cur.execute("SELECT * FROM bilan_passif WHERE id_client=%s ORDER BY rubrique", (id_client,))
-        passif = cur.fetchall()
-        cur.execute("SELECT * FROM cpc WHERE id_client=%s ORDER BY rubrique", (id_client,))
-        cpc = cur.fetchall()
-        cur.close()
+        # counts
+        cursor.execute("SELECT COUNT(*) AS cnt FROM bilan_actif WHERE id_client = %s", (id_client,))
+        cnt_actif = cursor.fetchone()['cnt']
+        cursor.execute("SELECT COUNT(*) AS cnt FROM bilan_passif WHERE id_client = %s", (id_client,))
+        cnt_passif = cursor.fetchone()['cnt']
+        # attention au nom réel de la table CPC : "cpc" ou "bilan_cpc" ?
+        cursor.execute("SELECT COUNT(*) AS cnt FROM cpc WHERE id_client = %s", (id_client,))
+        cnt_cpc = cursor.fetchone()['cnt']
+
+        # fetch pages
+        cursor.execute("SELECT * FROM bilan_actif WHERE id_client = %s ORDER BY id LIMIT %s OFFSET %s", (id_client, per_page, offset_actif))
+        actif_rows = cursor.fetchall()
+        cursor.execute("SELECT * FROM bilan_passif WHERE id_client = %s ORDER BY id LIMIT %s OFFSET %s", (id_client, per_page, offset_passif))
+        passif_rows = cursor.fetchall()
+        cursor.execute("SELECT * FROM cpc WHERE id_client = %s ORDER BY id LIMIT %s OFFSET %s", (id_client, per_page, offset_cpc))
+        cpc_rows = cursor.fetchall()
+
+        # derive columns automatically from first row (s'il y en a)
+        actif_cols = list(actif_rows[0].keys()) if actif_rows else []
+        passif_cols = list(passif_rows[0].keys()) if passif_rows else []
+        cpc_cols = list(cpc_rows[0].keys()) if cpc_rows else []
+
+        # get client name (optionnel mais pratique pour l'affichage)
+        cursor.execute("SELECT nom_client FROM client WHERE id_client = %s", (id_client,))
+        client_row = cursor.fetchone()
+        client_name = client_row.get('nom_client') if client_row else None
+
     except Exception as e:
         flash(f"Erreur BD: {e}", "danger")
-        return redirect(url_for('admin.clients_list'))
+        # valeurs de secours pour empêcher plantage template
+        actif_rows = passif_rows = cpc_rows = []
+        actif_cols = passif_cols = cpc_cols = []
+        cnt_actif = cnt_passif = cnt_cpc = 0
+        client_name = None
     finally:
-        try: conn.close()
-        except: pass
+        if cursor: cursor.close()
+        if conn: conn.close()
 
-    return render_template('client_bilans_readonly.html', client=client, actif=actif, passif=passif, cpc=cpc)
+    return render_template(
+        'client_bilans_readonly.html',
+        id_client=id_client,
+        client_name=client_name,
+        actif_rows=actif_rows,
+        passif_rows=passif_rows,
+        cpc_rows=cpc_rows,
+        actif_cols=actif_cols,
+        passif_cols=passif_cols,
+        cpc_cols=cpc_cols,
+        page_actif=page_actif,
+        page_passif=page_passif,
+        page_cpc=page_cpc,
+        total_actif=cnt_actif,
+        total_passif=cnt_passif,
+        total_cpc=cnt_cpc,
+        per_page=per_page,
+        dbname=DB_CONFIG.get('database'),
+        counts={'actif': cnt_actif, 'passif': cnt_passif, 'cpc': cnt_cpc}
+    )
 
-@admin_bp.route('/admin/clients/edit/<id_client>', methods=['GET', 'POST'])
+@admin_bp.route('/clients/edit/<id_client>', methods=['GET', 'POST'])
 def client_edit(id_client):
     if request.method == 'POST':
         nom_client = (request.form.get('nom_client') or '').strip()
@@ -241,7 +288,7 @@ def client_edit(id_client):
         except: pass
     return render_template('client_form.html', client=client)
 
-@admin_bp.route('/admin/clients/delete/<id_client>', methods=['POST'])
+@admin_bp.route('/clients/delete/<id_client>', methods=['POST'])
 def client_delete(id_client):
     try:
         conn = get_db_conn()
@@ -259,3 +306,50 @@ def client_delete(id_client):
         try: conn.close()
         except: pass
     return redirect(url_for('admin.clients_list'))
+
+@admin_bp.route('/clients/<int:id_client>/bilans_debug', methods=['GET'])
+def client_bilans_debug(id_client):
+    current_app.logger.info("DEBUG route called with id_client=%s", id_client)
+    cfg = {"host":"localhost","user":"root","password":"","database":"ocr_system","charset":"utf8mb4"}
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(**cfg)
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT COUNT(*) AS cnt FROM bilan_actif WHERE id_client = %s", (id_client,))
+        cnt_actif = cursor.fetchone()['cnt']
+
+        cursor.execute("SELECT COUNT(*) AS cnt FROM bilan_passif WHERE id_client = %s", (id_client,))
+        cnt_passif = cursor.fetchone()['cnt']
+
+        cursor.execute("SELECT COUNT(*) AS cnt FROM bilan_cpc WHERE id_client = %s", (id_client,))
+        cnt_cpc = cursor.fetchone()['cnt']
+
+        cursor.execute("SELECT * FROM bilan_actif WHERE id_client = %s LIMIT 5", (id_client,))
+        sample_actif = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM bilan_passif WHERE id_client = %s LIMIT 5", (id_client,))
+        sample_passif = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM bilan_cpc WHERE id_client = %s LIMIT 5", (id_client,))
+        sample_cpc = cursor.fetchall()
+
+        cursor.execute("SELECT nom_client FROM client WHERE id_client = %s", (id_client,))
+        client_row = cursor.fetchone()
+
+        return jsonify({
+            "id_client_received": id_client,
+            "client_row": client_row,
+            "counts": {"actif": cnt_actif, "passif": cnt_passif, "cpc": cnt_cpc},
+            "sample_actif": sample_actif,
+            "sample_passif": sample_passif,
+            "sample_cpc": sample_cpc,
+            "request_view_args": request.view_args
+        })
+    except Exception as e:
+        current_app.logger.exception("Debug DB error: %s", e)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if cursor: cursor.close()
+        if conn: conn.close()

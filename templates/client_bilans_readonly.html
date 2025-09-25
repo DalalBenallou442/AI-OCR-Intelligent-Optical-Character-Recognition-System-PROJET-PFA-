@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Bilans client {{ id_client }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f7faf6; padding: 2rem; font-family: Arial, sans-serif; }
+    .card { margin-bottom: 1.5rem; }
+    pre.debug { background:#fff;padding:1rem;border:1px solid #ddd; overflow:auto; }
+    table th, table td { vertical-align: middle; text-align: left; }
+    .back { margin-bottom: 1rem; }
+    .nowrap { white-space: nowrap; }
+    .pagination { margin-top: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin.clients_list') }}" class="btn btn-secondary back">&larr; Retour</a>
+    <h2>Bilans pour le client <strong>{{ client_name or id_client }}</strong> (ID: {{ id_client }})</h2>
+
+    {% macro render_table(title, rows, cols, header_class='table-light') %}
+      <div class="card">
+        <div class="card-header {{ header_class }}">
+          {{ title }} — {{ rows|length }} ligne(s)
+        </div>
+        <div class="card-body">
+          {% if rows %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm">
+                <thead class="table-secondary">
+                  <tr>
+                    {% for col in cols %}
+                      <th class="nowrap">{{ col }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for r in rows %}
+                    <tr>
+                      {% for col in cols %}
+                        <td>{{ r.get(col) }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">Aucune ligne disponible.</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endmacro %}
+
+    <!-- Bilan Actif -->
+    {{ render_table('Bilan Actif', actif_rows, actif_cols, 'bg-success text-white') }}
+
+    {# Pagination pour Actif #}
+    {% set total_pages_actif = (total_actif + per_page - 1) // per_page if per_page and total_actif is not none else 0 %}
+    {% if total_pages_actif > 1 %}
+      <nav aria-label="Pagination Actif">
+        <ul class="pagination">
+          {% for p in range(1, total_pages_actif + 1) %}
+            <li class="page-item {% if p == page_actif %}active{% endif %}">
+              <a class="page-link"
+                 href="{{ url_for('admin.client_bilans',
+                                  id_client=id_client,
+                                  page_actif=p,
+                                  page_passif=page_passif,
+                                  page_cpc=page_cpc) }}">{{ p }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    <!-- Bilan Passif -->
+    {{ render_table('Bilan Passif', passif_rows, passif_cols, 'bg-warning text-dark') }}
+
+    {# Pagination pour Passif #}
+    {% set total_pages_passif = (total_passif + per_page - 1) // per_page if per_page and total_passif is not none else 0 %}
+    {% if total_pages_passif > 1 %}
+      <nav aria-label="Pagination Passif">
+        <ul class="pagination">
+          {% for p in range(1, total_pages_passif + 1) %}
+            <li class="page-item {% if p == page_passif %}active{% endif %}">
+              <a class="page-link"
+                 href="{{ url_for('admin.client_bilans',
+                                  id_client=id_client,
+                                  page_actif=page_actif,
+                                  page_passif=p,
+                                  page_cpc=page_cpc) }}">{{ p }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    <!-- Bilan CPC -->
+    {{ render_table('Bilan CPC', cpc_rows, cpc_cols, 'bg-info text-white') }}
+
+    {# Pagination pour CPC #}
+    {% set total_pages_cpc = (total_cpc + per_page - 1) // per_page if per_page and total_cpc is not none else 0 %}
+    {% if total_pages_cpc > 1 %}
+      <nav aria-label="Pagination CPC">
+        <ul class="pagination">
+          {% for p in range(1, total_pages_cpc + 1) %}
+            <li class="page-item {% if p == page_cpc %}active{% endif %}">
+              <a class="page-link"
+                 href="{{ url_for('admin.client_bilans',
+                                  id_client=id_client,
+                                  page_actif=page_actif,
+                                  page_passif=page_passif,
+                                  page_cpc=p) }}">{{ p }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  </div>
+</body>
+</html>

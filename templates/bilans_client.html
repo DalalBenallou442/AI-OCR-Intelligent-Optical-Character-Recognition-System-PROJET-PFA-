@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Bilans client {{ id_client }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f7faf6; padding: 2rem; font-family: Arial, sans-serif; }
+    .card { margin-bottom: 1.5rem; }
+    .small-muted { font-size: 0.9rem; color: #666; }
+    table th, table td { vertical-align: middle; text-align: left; }
+    .back { margin-bottom: 1rem; }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{{ url_for('admin.clients_list') }}" class="btn btn-secondary back">&larr; Retour à la liste clients</a>
+
+    <h2>Bilans pour le client <strong>{{ client_name or id_client }}</strong> (ID: {{ id_client }})</h2>
+
+    <!-- Bilan Actif -->
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        Bilan Actif — {{ actif_rows|length }} ligne(s)
+      </div>
+      <div class="card-body">
+        {% if actif_rows %}
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th><th>Sous catégorie</th><th>Rubrique</th><th>Montant brut</th><th>Amortissements / Provisions</th><th>Net exercice</th><th>Net exercice préc.</th><th>Commentaires</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in actif_rows %}
+                  <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.sous_categorie }}</td>
+                    <td>{{ r.rubrique }}</td>
+                    <td>{{ r.montant_brut }}</td>
+                    <td>{{ r.amortissements_provisions }}</td>
+                    <td>{{ r.net_exercice }}</td>
+                    <td>{{ r.net_exercice_prec }}</td>
+                    <td><pre>{{ r.commentaires }}</pre></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="small-muted">Aucune ligne dans la table bilan_actif pour ce client.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Bilan Passif -->
+    <div class="card">
+      <div class="card-header bg-warning text-dark">
+        Bilan Passif — {{ passif_rows|length }} ligne(s)
+      </div>
+      <div class="card-body">
+        {% if passif_rows %}
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th><th>Sous catégorie</th><th>Rubrique</th><th>Net exercice</th><th>Net exercice préc.</th><th>Commentaires</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in passif_rows %}
+                  <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.sous_categorie }}</td>
+                    <td>{{ r.rubrique }}</td>
+                    <td>{{ r.net_exercice }}</td>
+                    <td>{{ r.net_exercice_prec }}</td>
+                    <td><pre>{{ r.commentaires }}</pre></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="small-muted">Aucune ligne dans la table bilan_passif pour ce client.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Bilan CPC -->
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        Bilan CPC — {{ cpc_rows|length }} ligne(s)
+      </div>
+      <div class="card-body">
+        {% if cpc_rows %}
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th><th>Sous catégorie</th><th>Rubrique</th><th>Propres à l'exercice</th><th>Concernant exercices préc.</th><th>TOTAUX</th><th>Exercice préc.</th><th>Commentaires</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in cpc_rows %}
+                  <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.sous_categorie }}</td>
+                    <td>{{ r.rubrique }}</td>
+                    <td>{{ r.propres_a_l_exercice }}</td>
+                    <td>{{ r.concernant_les_exercices_prec }}</td>
+                    <td>{{ r.totaux_de_l_exercice }}</td>
+                    <td>{{ r.exercice_prec }}</td>
+                    <td><pre>{{ r.commentaires }}</pre></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="small-muted">Aucune ligne dans la table bilan_cpc pour ce client.</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
