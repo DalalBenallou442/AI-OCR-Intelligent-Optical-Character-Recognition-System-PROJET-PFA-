@@ -55,6 +55,30 @@ def switch_key():
 
 init_genai()
 
+# --- Gemini: liste et sélection automatique du meilleur modèle ---
+AVAILABLE_MODELS_MAP = {}
+if genai:
+    try:
+        for m in genai.list_models():
+            name = getattr(m, "name", None) or str(m)
+            if name:
+                clean = name.lower().strip()
+                if clean.startswith("models/"):
+                    clean = clean.split("/", 1)[1]
+                AVAILABLE_MODELS_MAP[clean] = name
+        if DEBUG:
+            print("DEBUG modèles Gemini disponibles:", list(AVAILABLE_MODELS_MAP.keys()))
+    except Exception as e:
+        print("DEBUG: Impossible de lister les modèles Gemini:", e)
+PREFERRED = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash"]
+chosen_model_full = None
+for pref in PREFERRED:
+    if pref in AVAILABLE_MODELS_MAP:
+        chosen_model_full = AVAILABLE_MODELS_MAP[pref]
+        break
+if not chosen_model_full and AVAILABLE_MODELS_MAP:
+    chosen_model_full = next(iter(AVAILABLE_MODELS_MAP.values()))
+
 # ---------------- Prompt (inchangé) -----------------
 PROMPT_BILAN_TABLEAU = """
 Tu es un parseur LLM spécialisé en bilans comptables français. Entrée : le texte OCR d'UNE SEULE PAGE (tableau scanné).
@@ -456,7 +480,7 @@ def ensure_templates_exist(tpl_act_path="templates/bilan_actif.json",
         if DEBUG: print(f"⚠️ Template CPC manquant -> fichier placeholder créé : {tpl_cpc_path}")
 
 # -------------- call_gemini (tolérant) -------------------
-def call_gemini(content, model_name="gemini-1.5-flash"):
+def call_gemini(content, model_name="gemini-2.5-flash"):
     init_genai()
     if not API_KEYS or genai is None:
         if DEBUG: print("⚠️ Pas de clé Gemini ou lib manquante → on saute l'appel LLM (retour vide).")
@@ -634,7 +658,7 @@ def process_pdf_with_templates(pdf_path,
         raw_text = ""
         if use_gemini:
             try:
-                raw_text = call_gemini(payload)
+                raw_text = call_gemini(payload, model_name=chosen_model_full)
             except Exception as e:
                 if DEBUG: print("Gemini call exception:", e)
                 raw_text = ""
@@ -1151,3 +1175,4 @@ def align_numbers(nums, keys):
     for idx, v in enumerate(take):
         out[start + idx] = v
     return out
+

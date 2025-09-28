@@ -59,45 +59,20 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 
-def detect_scanned_pdf(filepath, min_alpha_chars=30):
-    """
-    Retourne True si le PDF semble scanné (image) :
-    - extrait le texte (PyPDF2) et compte les caractères alphabétiques ;
-    - si peu de texte -> vérifie la présence d'images via fitz (page.get_images()).
-    """
-    try:
-        from PyPDF2 import PdfReader
-        reader = PdfReader(filepath)
-        text = ""
-        for page in reader.pages:
-            txt = page.extract_text()
-            if txt:
-                text += txt + "\n"
+import fitz  # PyMuPDF
 
-        alpha_chars = sum(1 for c in text if c.isalpha())
-        if alpha_chars >= min_alpha_chars:
-            # beaucoup de texte => PDF natif
-            return False
-
-        # si peu de texte on considère scanné, mais on vérifie la présence d'images
-        try:
-            import fitz
-            doc = fitz.open(filepath)
-            img_count = 0
-            for page in doc:
-                imgs = page.get_images(full=True)
-                if imgs:
-                    img_count += len(imgs)
-            doc.close()
-            # s'il y a des images => scanné
-            return img_count > 0 or alpha_chars < min_alpha_chars
-        except Exception:
-            # si fitz indisponible, on parie sur le peu de texte et on retourne True
-            return True
-
-    except Exception:
-        # en cas d'erreur on suppose scanné (comportement sûr)
-        return True
+def detect_scanned_pdf(pdf_path, min_text_len=50, min_text_pages_ratio=0.5):
+    doc = fitz.open(pdf_path)
+    text_pages = 0
+    total_pages = len(doc)  # <--- récupère le nombre de pages AVANT de fermer
+    for page in doc:
+        txt = page.get_text("text").strip()
+        if len(txt) > min_text_len:
+            text_pages += 1
+    doc.close()
+    ratio = text_pages / total_pages  # <--- utilise total_pages ici
+    # Si moins de la moitié des pages ont du texte, on considère comme scanné
+    return ratio < min_text_pages_ratio
 
 
 
