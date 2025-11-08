@@ -5,7 +5,8 @@
 Il a été développé dans le cadre d'un Projet de Fin d'Année (PFA) réalisé au sein de la BMCI (Groupe BNP Paribas)
  
  🎯 Problématique et Objectif:
- Le traitement des bilans comptables, souvent fournis en PDF natifs ou scannés, est un processus manuel, chronophage et sujet aux erreurs. L'objectif de ce projet est de remédier à ces limites en proposant une plateforme intégrée qui automatise l'ensemble du processus.
+ Le traitement des bilans comptables, souvent fournis en PDF natifs ou scannés, est un processus manuel, chronophage et sujet aux erreurs. 
+ L'objectif de ce projet est de remédier à ces limites en proposant une plateforme intégrée qui automatise l'ensemble du processus.
  La solution développée permet de :Extraire automatiquement le contenu des PDF.
  Structurer les données en JSON normalisé (Actif, Passif, CPC).
  Convertir les résultats en fichiers Excel.
@@ -14,10 +15,26 @@ Il a été développé dans le cadre d'un Projet de Fin d'Année (PFA) réalisé
  📸 Captures d'écran de l'application
  Voici un aperçu des fonctionnalités clés de la plateforme :
  1. Interface Utilisateur (Upload)L'interface principale permet à l'utilisateur de sélectionner un client et de téléverser un fichier, en distinguant les PDF natifs des PDF scannés (images).
- 2.Module d'Administration (CRUD Clients)Un tableau de bord sécurisé (accessible après authentification 13131313) permet aux administrateurs de gérer les clients (Créer, Lire, Mettre à jour, Supprimer).
+    <img width="959" height="437" alt="image" src="https://github.com/user-attachments/assets/4ac0bc84-99f5-4930-b201-86352fcf2486" />
+
+ 2.Module d'Administration (CRUD Clients)Un tableau de bord sécurisé (accessible après authentification ) permet aux administrateurs de gérer les clients (Créer, Lire, Mettre à jour, Supprimer).
+ <img width="944" height="396" alt="image" src="https://github.com/user-attachments/assets/25d0f7a5-82ef-4fb9-8606-c3f9041abeb0" />
+ <img width="947" height="430" alt="image" src="https://github.com/user-attachments/assets/3fc199f2-062b-459b-bfea-8dbefb0a37a9" />
+
+
  3. Résultat de l'extraction (Fichier Excel)Les données extraites sont structurées et exportées dans un fichier Excel, avec des onglets distincts pour le Bilan Actif, le Bilan Passif et le CPC.
- 4. Workflow d'automatisation (n8n)Un workflow n8n automatise le processus de sauvegarde. Il est déclenché depuis l'interface et se charge de lire le fichier de résultat, d'extraire l'ID client et d'insérer les données dans la base MySQL.
- 5. Résultat en Base de Données (phpMyAdmin)Les données sont stockées dans la base MySQL et liées à un id_client , assurant la traçabilité et la centralisation de l'information.
+    <img width="1567" height="880" alt="image" src="https://github.com/user-attachments/assets/b1921a16-a1c9-4d50-ace6-e6a771427fe2" />
+
+    
+ 5. Workflow d'automatisation (n8n)Un workflow n8n automatise le processus de sauvegarde. Il est déclenché depuis l'interface et se charge de lire le fichier de résultat, d'extraire l'ID client et d'insérer les données dans la base MySQL.
+<img width="959" height="431" alt="image" src="https://github.com/user-attachments/assets/b3322b99-7dd6-41bb-89f8-fa1276c55a05" />
+<img width="553" height="842" alt="image" src="https://github.com/user-attachments/assets/1de6d7a6-0e6a-43cd-b31a-f22e931cbfd1" />
+<img width="506" height="807" alt="image" src="https://github.com/user-attachments/assets/f7b5983b-ec82-4b19-8325-d0c7c2948bcc" />
+<img width="542" height="842" alt="image" src="https://github.com/user-attachments/assets/7108dc62-e793-4266-bd29-8d87897bf48d" />
+
+
+
+ 7. Résultat en Base de Données (phpMyAdmin)Les données sont stockées dans la base MySQL et liées à un id_client , assurant la traçabilité et la centralisation de l'information.
  
  ✨ Fonctionnalités Principales:
  Double Prise en Charge (Natif vs Scanné) : Le système détecte automatiquement si un PDF est natif ou scanné pour appliquer le bon pipeline de traitement.
@@ -79,3 +96,4 @@ npm start
 J'espère que ce README vous aidera à bien présenter votre projet !
 
 Auteur : BENALLOU Dalal
+
